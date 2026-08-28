@@ -1,0 +1,54 @@
+/* ==== component: quiet (canonical -- edit tools/quiet.css, never a copy) ====
+
+   A group of links or controls that belong to the thing above them rather than
+   asking to be pressed: a paper's ACM/arXiv links, a theme switcher. One hairline
+   ring around the set, hairline seams between members, no borders of their own,
+   and the whole group sits back at partial opacity until a pointer or the
+   keyboard arrives.
+
+   Use: <p class="quiet"><a>ACM</a><a>arXiv</a></p>
+   Positioning is the caller's business; this only says how it looks. */
+
+.quiet {
+  display: inline-flex;
+  gap: 1px;
+  padding: 2px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--bg);
+  opacity: .62;
+  transition: opacity .15s ease;
+}
+
+.quiet:hover,
+.quiet:focus-within { opacity: 1; }
+
+.quiet > * {
+  appearance: none;
+  border: 0;
+  border-radius: 999px;
+  padding: .12rem .55rem;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: .72rem;
+  line-height: 1.5;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.quiet > *:hover {
+  background: var(--surface-2);
+  color: var(--fg);
+  text-decoration: none;
+}
+
+.quiet > *[aria-pressed="true"] {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) { .quiet { transition: none; } }
+
+/* ==== end component: quiet ==== */

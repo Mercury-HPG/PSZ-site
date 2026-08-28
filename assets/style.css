@@ -1,0 +1,1036 @@
+/* ==========================================================================
+   Jiannan Tian's Page
+   ========================================================================== */
+
+:root {
+  /* the banner bar. These are the ONLY per-site part of the banner: the rules in
+     the header block below are identical across the sites that share it. */
+  --bar: #0070a3;             /* the banner block: C, darkened to carry white */
+  --bar-fg: #ffffff;
+  --bar-idx: rgba(255, 255, 255, .62);
+  --bar-rule: rgba(255, 255, 255, .3);
+  --bar-hover: rgba(255, 255, 255, .14);
+  --bar-current-bg: var(--bg);
+  --bar-current-fg: var(--accent);
+  --bar-current-idx: var(--muted);
+  --bar-mark-filter: none;
+  --bg: #ffffff;
+  --surface: #fafafa;
+  --surface-2: #f0f0f0;
+  --fg: #000000;
+  --fg-soft: #333333;
+  --muted: #6e6e6e;
+  --rule: #e4e4e4;
+  --rule-strong: #c9c9c9;
+  --accent: #0070a3;          /* C (#008ecc), darkened for text on white */
+  --accent-fg: #ffffff;
+  --accent-soft: #e6f2f8;
+  --accent-line: #0070a3;
+  --bar-fg: #ffffff;
+
+  --prose: 800px;
+  --wide: 800px;     /* the column; the banner tracks it, so both scale together */
+
+  --radius: 10px;
+  --radius-sm: 6px;
+
+  --shadow: 0 1px 2px rgba(0, 0, 0, .06), 0 6px 20px -12px rgba(0, 0, 0, .28);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bar: #005a82;
+    --bar-current-fg: var(--fg);
+    --bg: #121212;
+    --surface: #1b1b1b;
+    --surface-2: #242424;
+    --fg: #f2f2f2;
+    --fg-soft: #c9c9c9;
+    --muted: #8a8a8a;
+    --rule: #232323;
+    --rule-strong: #3a3a3a;
+    --accent: #5cc4f0;         /* C, lifted to carry on a dark page */
+    --accent-fg: #000000;
+    --accent-soft: #0b2430;
+    --accent-line: #5cc4f0;
+    --bar-fg: #ffffff;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .6), 0 8px 24px -14px rgba(0, 0, 0, .9);
+  }
+}
+
+  :root[data-theme="dark"] {
+    --bar: #005a82;
+    --bar-current-fg: var(--fg);
+    --bg: #121212;
+    --surface: #1b1b1b;
+    --surface-2: #242424;
+    --fg: #f2f2f2;
+    --fg-soft: #c9c9c9;
+    --muted: #8a8a8a;
+    --rule: #232323;
+    --rule-strong: #3a3a3a;
+    --accent: #5cc4f0;         /* C, lifted to carry on a dark page */
+    --accent-fg: #000000;
+    --accent-soft: #0b2430;
+    --accent-line: #5cc4f0;
+    --bar-fg: #ffffff;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .6), 0 8px 24px -14px rgba(0, 0, 0, .9);
+  }
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: 4rem;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: 400 15px/1.5 "IBM Plex Mono", ui-monospace, SFMono-Regular, "SF Mono",
+        Menlo, Consolas, monospace;
+  font-feature-settings: "kern" 1, "liga" 1;
+  text-rendering: optimizeLegibility;
+}
+
+img { max-width: 100%; height: auto; }
+
+a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-color: var(--rule-strong);
+  text-decoration-thickness: .06em;
+  text-underline-offset: .18em;
+}
+a:hover { text-decoration-color: currentColor; }
+
+.btn, .skip, .card-thumb {
+  text-decoration: none;
+}
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+
+.wrap { width: 100%; max-width: var(--wide); margin: 0 auto; padding: 0 1.25rem; }
+
+/* Deliberately NOT a per-block max-width here: a block that sets `margin: 0`
+   later in this file would silently drop the auto margins and sit flush left
+   while its neighbours centred, and the section edges would go ragged. The wrap
+   is the measure; every block inherits one edge from it. */
+.prose { max-width: var(--prose); }
+
+/* ---------- skip link ---------- */
+
+.skip {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  padding: .6rem 1rem;
+  background: var(--accent);
+  color: var(--accent-fg);
+  z-index: 100;
+}
+.skip:focus { left: 0; }
+
+/* ---------- header: full-bleed banner ---------- */
+
+/* The bar bleeds to the viewport so nothing scrolls through beside it; the CELLS
+   are what stay clamped to the text column. */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--bar);
+  color: var(--bar-fg);
+}
+
+.banner {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  max-width: var(--wide);
+  margin: 0 auto;
+  padding: 0;
+  background: var(--bar);
+  list-style: none;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.banner::-webkit-scrollbar { display: none; }
+
+.banner > li { display: flex; flex: 1 1 0; min-width: 0; }
+
+.banner > li + li { border-left: 1px solid var(--bar-rule); }
+
+.banner a,
+.banner .cell {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0;
+  flex: 1;
+  min-width: 0;
+  padding: .34rem .7rem .4rem;
+  color: var(--bar-fg);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background .12s ease, color .12s ease;
+}
+
+.banner .idx {
+  font-size: .58rem;
+  line-height: 1.35;
+  font-weight: 500;
+  letter-spacing: .06em;
+  font-variant-numeric: tabular-nums;
+  color: var(--bar-idx);
+}
+
+.banner .label {
+  font-size: .82rem;
+  line-height: 1.3;
+  font-weight: 400;
+  letter-spacing: -.01em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.banner .brand-cell {
+  flex: 0 0 auto;
+  overflow: hidden;
+  max-width: 14rem;
+  transition: max-width .24s ease, opacity .18s ease;
+}
+
+/* while the page's own name is on screen, the banner's copy is redundant. It
+   collapses to zero width rather than switching off, so the other cells widen
+   into the space instead of jumping. */
+.site-header[data-name-visible] .brand-cell.decorative {
+  max-width: 0;
+  opacity: 0;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .banner .brand-cell { transition: none; }
+}
+
+.banner .brand-cell .label { font-weight: 600; }
+
+.banner .brand-cell .idx { display: flex; align-items: center; gap: .4rem; }
+.banner .brand-cell img { width: 14px; height: 16px; filter: var(--bar-mark-filter); }
+
+.banner a:hover { background: var(--bar-hover); text-decoration: none; }
+
+.banner a[aria-current="page"] { background: var(--bar-current-bg); color: var(--bar-current-fg); }
+.banner a[aria-current="page"] .idx { color: var(--bar-current-idx); }
+.banner a[aria-current="page"]:hover { background: var(--bar-current-bg); }
+
+.banner .ext .idx::after { content: "\2197"; }
+
+@media (max-width: 46rem) {
+  .banner a, .banner .cell { padding: .3rem .7rem .35rem; }
+  .banner .label { font-size: .88rem; }
+  /* grow to fill the bar when there is room, never shrink below the label when
+     there is not -- `0 0 auto` did the second half only, so a narrow window left
+     the cells huddled at the left with dead bar beside them */
+  .banner > li { flex: 1 0 auto; }
+  .banner .brand-cell.decorative { display: none; }
+  .banner { max-width: 100%; }
+}
+
+/* ---------- headings & sections ---------- */
+
+.section { padding: 1.9rem 0 0; }
+
+.section-head {
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  margin-bottom: .7rem;
+  padding-bottom: .35rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.section-head h2 {
+  margin: 0;
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--fg);
+}
+
+.section-head .hint { font-size: .9rem; color: var(--muted); }
+
+p { margin: 0 0 .55rem; }
+p:last-child { margin-bottom: 0; }
+
+/* ---------- hero ---------- */
+
+.hero { padding: 1.6rem 0 .3rem; }
+
+/* seal on the left, spanning name + links */
+.hero-id {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  margin: 0 0 1.05rem;
+}
+
+/* the Hg element tile, the group's own mark */
+.hero-mark {
+  flex: none;
+  display: block;
+  width: 76px;
+  height: auto;
+}
+
+.hero h1 {
+  margin: 0 0 .3rem;
+  font-size: clamp(1.75rem, 1.2rem + 2vw, 2.4rem);
+  line-height: 1.08;
+  letter-spacing: -.025em;
+}
+
+.hero h1 .degree,
+.hero .role .degree {
+  font-size: .8em;
+  font-weight: inherit;
+  letter-spacing: .055em;
+  text-transform: uppercase;
+}
+
+/* a page's one-line gloss sits BESIDE its title, on the title's baseline, rather
+   than starting a second line for a fragment */
+.page-head {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: .3rem .9rem;
+}
+
+.hero .role {
+  margin: 0;
+  color: var(--fg-soft);
+  font-size: 1.02rem;
+}
+
+.hero .bio { color: var(--fg-soft); }
+.hero .bio strong { color: var(--fg); font-weight: 600; }
+
+@media (max-width: 40rem) {
+  .hero { padding-top: 2rem; }
+  .hero-id { gap: .85rem; margin-bottom: 1.5rem; }
+  .hero-mark { width: 56px; }
+}
+
+/* ---------- callout ---------- */
+
+.callout {
+  margin: 1.2rem 0 0;
+  padding: 0 0 0 1rem;
+  border: 0;
+  border-left: 1px solid var(--rule-strong);
+  background: none;
+}
+
+/* the label runs into the sentence rather than sitting on its own line */
+.callout-label {
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--fg);
+}
+.callout-label::after { content: ":"; }
+
+.callout p { color: var(--fg-soft); }
+
+.callout .email { color: var(--fg); }
+
+/* ---------- news ---------- */
+
+.news { margin: 0; padding: 0; list-style: none; }
+
+.news li {
+  display: grid;
+  grid-template-columns: 4.25rem minmax(0, 1fr);
+  gap: .75rem;
+  padding: .28rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.news li:last-child { border-bottom: 0; }
+
+.news time,
+.news .when {
+  font-variant-numeric: tabular-nums;
+  font-size: .82rem;
+  font-weight: 600;
+  letter-spacing: .02em;
+  color: var(--muted);
+  padding-top: .12rem;
+}
+
+.news p { margin: 0; color: var(--fg-soft); }
+
+@media (max-width: 30rem) {
+  .news li { grid-template-columns: minmax(0, 1fr); gap: .15rem; }
+}
+
+/* a small category label. It rides ON a heading, so it must stay clearly the
+   smaller of the two: the thing being named is the heading, not the label. */
+.chip {
+  display: inline-block;
+  padding: .06rem .38rem;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  white-space: nowrap;
+  vertical-align: .12em;
+}
+
+/* ---------- cards (responsive grid: events, software) ---------- */
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--surface);
+  overflow: hidden;
+  transition: border-color .15s ease, box-shadow .15s ease, transform .15s ease;
+}
+
+.card:hover { border-color: var(--rule-strong); box-shadow: var(--shadow); }
+
+.card-thumb {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 9;
+}
+
+/* software covers carry a name, not a place: half the height says it just as
+   well and gets three products onto a screen */
+.cards.compact .card-thumb {
+  aspect-ratio: 32 / 9;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--rule);
+}
+
+.card-thumb img,
+.card-thumb .placeholder { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+/* inline, so it reads the page's own --accent rather than a colour baked into a
+   file: an <img> cannot see the document's custom properties */
+.card-thumb .placeholder { font-family: inherit; }
+
+.card-body { display: flex; flex-direction: column; gap: .35rem; padding: .8rem .95rem .9rem; flex: 1; }
+
+/* the venue tag rides on the work's name, not a line of its own */
+.card h3 .chip { margin-right: .5rem; }
+
+/* the name and where to go sit on ONE line: a card that says two short things
+   should not spend three rows saying them */
+.card-head {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: .5rem .7rem;
+}
+
+.card h3 { margin: 0; font-size: 1.12rem; line-height: 1.2; letter-spacing: -.015em; }
+
+.card .subtitle { margin: 0; color: var(--fg-soft); font-size: .88rem; line-height: 1.35; }
+
+/* the date rides on the name's line: same line, lower voice, so the workshop is
+   still what the heading says */
+.card h3 .when {
+  font-weight: 400;
+  font-size: .82em;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+
+
+.btn {
+  display: inline-block;
+  padding: .16rem .5rem;
+  border: 1px solid var(--rule-strong);
+  border-radius: 999px;
+  background: var(--bg);
+  font-size: .87rem;
+  font-weight: 550;
+  color: var(--fg-soft);
+}
+.btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); text-decoration: none; }
+
+/* the same pill, sitting on the cover it belongs to */
+.btn.on-cover {
+  position: absolute;
+  right: .6rem;
+  bottom: .6rem;
+  background: var(--bg);
+  border-color: transparent;
+  color: var(--fg);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, .3);
+}
+
+.card details { border-top: 1px solid var(--rule); padding-top: .65rem; }
+
+.card summary {
+  cursor: pointer;
+  font-size: .85rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  list-style: none;
+}
+.card summary::-webkit-details-marker { display: none; }
+.card summary::before { content: "▸ "; display: inline-block; transition: transform .15s ease; }
+.card details[open] summary::before { content: "▾ "; }
+.card summary:hover { color: var(--accent); }
+
+.card details p { margin: .4rem 0 0; font-size: .9rem; line-height: 1.45; color: var(--fg-soft); }
+
+/* ---------- footer ---------- */
+
+.site-footer { margin-top: 2.4rem; border-top: 1px solid var(--rule); background: var(--surface); }
+
+/* The theme switch is position:fixed at bottom .75rem, so it is NOT in this
+   row and align-items cannot reach it. What lines the two up is arithmetic:
+   the switch's centre sits .75rem + half its 27px height = 26px off the bottom,
+   and the copyright's centre sits padding-bottom + half its 20px line. At 1rem
+   they land on the same 26px, which is also what makes the padding symmetric. */
+.site-footer .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem 1.25rem;
+  align-items: center;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  font-size: .85rem;
+  color: var(--muted);
+}
+
+@media print {
+  .site-header, .site-footer, .links { display: none; }
+  .card details { display: block; }
+  body { font-size: 11pt; }
+}
+
+/* where an event actually sits: its host conference, date, and city */
+.card .meta {
+  margin: 0;
+  font-size: .88rem;
+  color: var(--muted);
+}
+.card .meta strong { color: var(--fg-soft); font-weight: 700; }
+
+/* ---------- people ---------- */
+
+.people { margin: 0; padding: 0; list-style: none; }
+
+.people > li { padding: .5rem 0; border-bottom: 1px solid var(--rule); }
+.people > li:last-child { border-bottom: 0; }
+
+.people .person { margin: 0; }
+
+.people .person-name { font-weight: 600; }
+
+.people .person-role { color: var(--muted); font-size: .92rem; margin-left: .5em; }
+
+/* ---------- research themes ---------- */
+
+.themes { margin: 0; padding: 0; list-style: none; max-width: var(--prose); }
+
+.themes > li { padding: .7rem 0; border-bottom: 1px solid var(--rule); }
+.themes > li:last-child { border-bottom: 0; }
+
+.themes h3 { margin: 0 0 .2rem; font-size: 1rem; letter-spacing: -.01em; }
+
+.themes p { margin: 0; color: var(--fg-soft); font-size: .92rem; }
+
+/* ---------- project page bits ---------- */
+
+/* The hero row still wants to be a flex line; a paper's links do NOT -- they are
+   a `quiet` group, and naming them here at higher specificity stretched them to
+   the card's full width. */
+/* A pill group is part of the sentence before it, not a row under it. */
+.links { margin-left: .45rem; vertical-align: .06em; }
+
+/* inline with the sentence it annotates, not a row of its own */
+
+/* the venue tag needs air before the title it labels */
+.pubs .chip { margin-right: .5rem; }
+
+.steps { max-width: var(--prose); margin: 0; padding-left: 1.2rem; color: var(--fg-soft); }
+.steps li { margin: 0 0 .35rem; }
+
+.note { color: var(--muted); font-size: .9rem; margin-top: .8rem; }
+
+.themes h3 .when { font-weight: 400; font-size: .82em; color: var(--muted); }
+
+/* The order is the point, but the markers are not: the venue chip already says
+   which paper this is, and a second numeral beside it says nothing. */
+.pubs { list-style: none; margin: 0; padding: 0; }
+
+.pubs .pub { margin: 0; }
+.pubs .pub-title { font-weight: 600; }
+.pubs .where { color: var(--muted); font-size: .9rem; }
+
+code { font-size: .92em; color: var(--fg); }
+
+/* ---------- theme switch ---------- */
+
+/* Placement only. Everything about how it LOOKS is the `quiet` component, which
+   this shares with any other group of links that should not shout. */
+.theme-switch {
+  position: fixed;
+  bottom: .75rem;
+  left: 50%;
+  transform: translateX(calc(min(50vw, var(--wide) / 2) - 1.25rem - 100%));
+  z-index: 30;
+}
+
+/* It floats OVER the page, so it takes glass rather than paint: the content
+   under it stays legible as a blur instead of being hidden by a slab. The
+   opaque background from `quiet` is the fallback where backdrop-filter is not
+   supported. */
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .theme-switch {
+    background: color-mix(in srgb, var(--bg) 70%, transparent);
+    -webkit-backdrop-filter: saturate(1.7) blur(14px);
+    backdrop-filter: saturate(1.7) blur(14px);
+  }
+}
+
+@media print { .theme-switch { display: none; } }
+
+/* ==== component: quiet (canonical -- edit tools/quiet.css, never a copy) ====
+
+   A group of links or controls that belong to the thing above them rather than
+   asking to be pressed: a paper's ACM/arXiv links, a theme switcher. One hairline
+   ring around the set, hairline seams between members, no borders of their own,
+   and the whole group sits back at partial opacity until a pointer or the
+   keyboard arrives.
+
+   Use: <p class="quiet"><a>ACM</a><a>arXiv</a></p>
+   Positioning is the caller's business; this only says how it looks. */
+
+.quiet {
+  display: inline-flex;
+  gap: 1px;
+  padding: 2px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--bg);
+  opacity: .62;
+  transition: opacity .15s ease;
+}
+
+.quiet:hover,
+.quiet:focus-within { opacity: 1; }
+
+.quiet > * {
+  appearance: none;
+  border: 0;
+  border-radius: 999px;
+  padding: .12rem .55rem;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: .72rem;
+  line-height: 1.5;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.quiet > *:hover {
+  background: var(--surface-2);
+  color: var(--fg);
+  text-decoration: none;
+}
+
+.quiet > *[aria-pressed="true"] {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) { .quiet { transition: none; } }
+
+/* ==== end component: quiet ==== */
+
+/* ---------- colour polish ---------- */
+
+/* Everything here is derived from --accent, so a page that redeclares its accent
+   gets a matching set for free and nothing has to be hand-picked per site. The
+   plain values above stay as the fallback: without color-mix() the pages simply
+   render neutral, which is what they did before. */
+@supports (color: color-mix(in srgb, red 50%, blue)) {
+  :root {
+    /* surfaces carry a few per cent of the accent instead of being neutral grey,
+       so a card belongs to the palette rather than sitting beside it */
+    --surface: color-mix(in srgb, var(--accent) 4%, var(--bg));
+    --surface-2: color-mix(in srgb, var(--accent) 8%, var(--bg));
+    --rule: color-mix(in srgb, var(--accent) 12%, var(--rule-strong));
+  }
+
+  /* A bar of flat colour reads as a swatch; a sliver of light across it reads as
+     a surface. 4% either side of the accent -- enough to catch the eye, not
+     enough to notice as a gradient. */
+  .site-header {
+    background: linear-gradient(
+      160deg,
+      color-mix(in srgb, var(--bar) 92%, white) 0%,
+      var(--bar) 45%,
+      color-mix(in srgb, var(--bar) 94%, black) 100%);
+  }
+
+  .banner { background: transparent; }
+
+  /* A wash under the masthead, fading out before the first section: it gives the
+     top of the page a temperature without tinting the whole canvas. */
+  body {
+    background-image: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--accent) 7%, var(--bg)) 0,
+      var(--bg) 340px);
+    background-repeat: no-repeat;
+  }
+
+  /* the rule under a section head picks up the accent as it travels right */
+  .section-head {
+    border-bottom: 0;
+    background: linear-gradient(90deg, var(--accent) 0, transparent 62%) bottom / 100% 1px no-repeat;
+  }
+
+  .card:hover { border-color: color-mix(in srgb, var(--accent) 45%, var(--rule-strong)); }
+
+  .chip { background: color-mix(in srgb, var(--accent) 13%, var(--bg)); }
+}
+
+/* ---------- classy grey ---------- */
+
+/* A quieter register for a product page: a warm-grey canvas with white panels
+   floating on it, a system grotesk for prose, and the monospace kept for the
+   things that are literally code -- labels, chips, commands, tables. */
+
+:root {
+  --bg: #f5f5f7;
+  --paper: #ffffff;
+  --fg: #1d1d1f;
+  --fg-soft: #38383d;
+  --muted: #6e6e73;
+  --rule: #d2d2d7;
+  --rule-strong: #c6c6cb;
+  --surface: #ffffff;
+  --surface-2: #ececf0;
+  --accent: #0066cc;
+  --accent-soft: #e8f0fb;
+  --accent-line: #0066cc;
+  --bar: rgba(245, 245, 247, .82);
+  --bar-fg: #1d1d1f;
+  --bar-idx: rgba(0, 0, 0, .45);
+  --bar-rule: rgba(0, 0, 0, .12);
+  --bar-hover: rgba(0, 0, 0, .05);
+  --bar-current-bg: var(--paper);
+  --bar-current-fg: var(--accent);
+  --bar-current-idx: var(--muted);
+  --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Inter, system-ui, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1d1d1f;
+    --paper: #2a2a2e;
+    --fg: #f5f5f7;
+    --fg-soft: #d2d2d7;
+    --muted: #98989d;
+    --rule: #3a3a3f;
+    --rule-strong: #48484d;
+    --surface: #2a2a2e;
+    --surface-2: #323237;
+    --accent: #6cb0ff;
+    --accent-soft: #16283d;
+    --bar: rgba(29, 29, 31, .82);
+    --bar-fg: #f5f5f7;
+    --bar-idx: rgba(255, 255, 255, .5);
+    --bar-rule: rgba(255, 255, 255, .14);
+    --bar-hover: rgba(255, 255, 255, .07);
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #1d1d1f;
+  --paper: #2a2a2e;
+  --fg: #f5f5f7;
+  --fg-soft: #d2d2d7;
+  --muted: #98989d;
+  --rule: #3a3a3f;
+  --rule-strong: #48484d;
+  --surface: #2a2a2e;
+  --surface-2: #323237;
+  --accent: #6cb0ff;
+  --accent-soft: #16283d;
+  --bar: rgba(29, 29, 31, .82);
+  --bar-fg: #f5f5f7;
+  --bar-idx: rgba(255, 255, 255, .5);
+  --bar-rule: rgba(255, 255, 255, .14);
+  --bar-hover: rgba(255, 255, 255, .07);
+}
+
+/* The root, not the body: every rem in this stylesheet then scales with it, so
+   the banner, chips, and buttons come down with the prose instead of floating
+   above it at their old size. */
+html { font-size: 15px; }
+
+body {
+  font-family: var(--sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  letter-spacing: -.002em;
+  background-image: none;
+}
+
+.banner .idx, .banner .label { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+
+/* This site's root is 15px (see below), and the shared banner sizes itself in
+   rem -- so its bar came out 39px against every other site's 42.4px. The three
+   metrics are restated here as the same values the family gets from a 16px
+   root: .34/.7/.4rem and .58/.82rem, times 16. Everything else on the page
+   still scales with the 15px root, which is the point of having one. */
+.banner a, .banner .cell { padding: 5.44px 11.2px 6.4px; }
+.banner .idx { font-size: 9.28px; }
+.banner .label { font-size: 13.12px; letter-spacing: 0; }
+
+@media (max-width: 46rem) {
+  .banner a, .banner .cell { padding: 4.8px 11.2px 5.6px; }
+  .banner .label { font-size: 14.08px; }
+}
+
+/* a hero with room around it, and a headline that is large but not loud */
+.hero { padding: 3.2rem 0 1rem; }
+
+/* Name and description share one line at one size: the name is what it is
+   called, the rest is what it is, and neither outranks the other here. Weight
+   and colour carry the distinction instead of scale. */
+.hero-id {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: .1rem .55rem;
+}
+
+.hero h1 { font-size: 1.28rem; font-weight: 600; letter-spacing: -.012em; }
+.hero .role { font-size: 1.28rem; font-weight: 400; color: var(--muted); margin: 0; max-width: none; }
+.hero .bio { margin: 1.6rem 0 0; }
+
+
+.section { padding: 3rem 0 0; }
+
+/* A plain hairline. The accent gradient under a heading was decoration doing no
+   work: the heading already separates the sections, and a coloured rule only
+   adds a hue that has to be tuned against everything else on the page. */
+.section-head {
+  justify-content: flex-start;
+  border-bottom: 1px solid var(--rule);
+  background: none;
+}
+.section-head h2 {
+  font-family: var(--sans);
+  font-size: 1.45rem;
+  font-weight: 600;
+  letter-spacing: -.015em;
+  text-transform: none;
+  color: var(--fg);
+}
+.section-head .hint { font-size: .95rem; }
+
+/* content sits on paper, not on the canvas */
+.card, .themes > li, .people > li, .pubs > li, .panel, .table-wrap {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+}
+
+.themes, .people, .pubs { display: grid; gap: .55rem; }
+.themes > li, .people > li, .pubs > li { padding: .9rem 1.05rem; border-bottom: 1px solid var(--rule); }
+
+.callout {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--accent);
+  border-radius: 14px;
+  padding: 1rem 1.15rem;
+}
+
+.panel { padding: 1rem 1.15rem; margin: 0 0 .7rem; }
+.panel-label {
+  margin: 0 0 .5rem;
+  font: 600 .72rem/1.4 "IBM Plex Mono", ui-monospace, monospace;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.panel-note { margin: .6rem 0 0; font-size: .9rem; color: var(--muted); }
+
+pre {
+  margin: 0;
+  overflow-x: auto;
+  font: .84rem/1.75 "IBM Plex Mono", ui-monospace, monospace;
+  color: var(--fg);
+}
+code { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .9em; }
+
+.table-wrap { overflow-x: auto; padding: .3rem .5rem; }
+table { width: 100%; border-collapse: collapse; font: .86rem/1.5 "IBM Plex Mono", ui-monospace, monospace; }
+th, td { padding: .5rem .7rem; text-align: right; border-bottom: 1px solid var(--rule); }
+th:first-child, td:first-child { text-align: left; }
+/* a description column reads as prose, not as a measurement */
+td:last-child, th:last-child { text-align: left; color: var(--muted); }
+tbody td:first-child { color: var(--fg); font-weight: 600; }
+thead th { color: var(--muted); font-weight: 600; }
+tbody tr:last-child td { border-bottom: 0; }
+
+.btn {
+  border-radius: 999px;
+  border-color: var(--rule-strong);
+  font-family: var(--sans);
+  font-size: .9rem;
+  padding: .3rem .85rem;
+}
+
+.chip { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+
+.steps { color: var(--fg-soft); }
+.note { color: var(--muted); }
+
+.site-footer { background: transparent; border-top: 1px solid var(--rule); }
+
+
+/* ---------- the footer sits at the bottom of the viewport ---------- */
+
+/* A short page used to leave the footer floating halfway up with dead canvas
+   under it. The column is the body itself: main takes the slack, so the footer
+   lands on the fold when the content is short and flows normally when it is not.
+   svh, not vh: on mobile vh counts the address bar and overshoots. */
+body {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+main { flex: 1 0 auto; }
+
+
+/* ---------- masthead: glass, and colour one cell at a time ---------- */
+
+/* Every site wears the bar the PI's site wears: not a coloured slab but the page
+   itself, pinned, with whatever scrolls under it going soft. The site's colour is
+   not gone -- it is what a single CELL becomes under the pointer, while the rest
+   of the bar stays exactly as it was.
+   No edit to the shared banner block: that block already paints a hovered cell
+   with --bar-hover, so the colour is just a token, and only the lit cell's own
+   text needs a rule. */
+:root {
+  --bar: rgba(255, 255, 255, .72);
+  --bar-fg: var(--fg);
+  --bar-idx: var(--muted);
+  --bar-rule: transparent;
+  --bar-hover: #0070a3;
+  --bar-current-bg: rgba(0, 0, 0, .06);
+  --bar-current-fg: var(--fg);
+  --bar-current-idx: var(--muted);
+  --bar-mark-filter: none;
+}
+
+.banner a:not([aria-current="page"]):hover { color: #ffffff; }
+.banner a:not([aria-current="page"]):hover .idx { color: rgba(255, 255, 255, .62); }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bar: rgba(18, 18, 18, .72);
+    --bar-fg: var(--fg);
+    --bar-idx: var(--muted);
+    --bar-rule: transparent;
+    --bar-hover: #005a82;
+    --bar-current-bg: rgba(255, 255, 255, .09);
+    --bar-current-fg: var(--fg);
+    --bar-current-idx: var(--muted);
+    --bar-mark-filter: none;
+  }
+  :root:not([data-theme="light"]) .banner a:not([aria-current="page"]):hover { color: #ffffff; }
+  :root:not([data-theme="light"]) .banner a:not([aria-current="page"]):hover .idx { color: rgba(255, 255, 255, .62); }
+}
+
+:root[data-theme="dark"] {
+  --bar: rgba(18, 18, 18, .72);
+  --bar-fg: var(--fg);
+  --bar-idx: var(--muted);
+  --bar-rule: transparent;
+  --bar-hover: #005a82;
+  --bar-current-bg: rgba(255, 255, 255, .09);
+  --bar-current-fg: var(--fg);
+  --bar-current-idx: var(--muted);
+  --bar-mark-filter: none;
+}
+:root[data-theme="dark"] .banner a:not([aria-current="page"]):hover { color: #ffffff; }
+:root[data-theme="dark"] .banner a:not([aria-current="page"]):hover .idx { color: rgba(255, 255, 255, .62); }
+
+.site-header {
+  background: var(--bar);
+  border-bottom: 1px solid var(--rule);
+}
+
+.banner { background: transparent; }
+
+/* Without backdrop-filter the bar is still a legible, mostly opaque strip. */
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .site-header {
+    -webkit-backdrop-filter: saturate(1.8) blur(16px);
+    backdrop-filter: saturate(1.8) blur(16px);
+  }
+}
+
+
+/* ---------- a page title and its gloss share a line ---------- */
+
+/* `flex-wrap: wrap` let the gloss drop below the title as soon as the two
+   together outgrew the column -- on the lab's Projects page that happened below
+   720px, which is an ordinary window. nowrap keeps the gloss on the title's
+   line and `min-width: 0` lets it shrink and wrap WITHIN its own box instead,
+   so the rule holds at any width and does not depend on how long the copy is.
+   A phone gets its line back: below 34rem there is no room to share. */
+.page-head,
+.hero-id {
+  flex-wrap: nowrap;
+}
+
+.page-head > .role,
+.hero-id > .role {
+  min-width: 0;
+}
+
+@media (max-width: 34rem) {
+  .page-head,
+  .hero-id { flex-wrap: wrap; }
+  .page-head > .role,
+  .hero-id > .role { min-width: 100%; }
+}

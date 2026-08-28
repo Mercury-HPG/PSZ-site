@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>pSZ/cuSZ</title>
+  <meta name="description"
+    content="pSZ/cuSZ: a GPU-based error-bounded lossy compressor for scientific data, and the first GPU-practical framework of its kind.">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#0070a3">
+  <link rel="canonical" href="https://mercury-hpg.github.io/PSZ-site/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+  <script>
+    // Applied before first paint so a forced theme never flashes the other one.
+    try { const t = localStorage.getItem('theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t } catch (e) { }
+  </script>
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="pSZ/cuSZ">
+  <meta property="og:description" content="A GPU-based error-bounded lossy compressor for scientific data.">
+</head>
+
+<body>
+
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <nav aria-label="Primary">
+      <ul class="banner">
+        <li class="brand-cell">
+          <a href="index.html" aria-current="page">
+            <span class="idx">Mercury</span>
+            <span class="label">pSZ</span>
+          </a>
+        </li>
+        <li><a href="#how"><span class="idx">01</span><span class="label">How</span></a></li>
+        <li><a href="#variants"><span class="idx">02</span><span class="label">Variants</span></a></li>
+        <li><a href="#papers"><span class="idx">03</span><span class="label">Papers</span></a></li>
+        <li><a href="#data"><span class="idx">04</span><span class="label">Data</span></a></li>
+        <li><a href="#install"><span class="idx">05</span><span class="label">Install</span></a></li>
+        <li><a class="ext" href="https://github.com/szcompressor/cuSZ"><span class="idx"></span><span
+              class="label">Repo</span></a></li>
+        <li><a class="ext" href="https://mercury-hpg.github.io/"><span class="idx"></span><span
+              class="label">Lab</span></a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <section class="hero">
+      <div class="wrap">
+        <div class="hero-id">
+          <h1>pSZ/cuSZ</h1>
+          <p class="role">A GPU-based error-bounded lossy compressor for scientific data.</p>
+        </div>
+
+        <div class="bio">
+          <p><strong>pSZ/cuSZ</strong> is a GPU implementation of the
+            <a href="https://github.com/szcompressor/SZ">SZ algorithm</a>. It was the first
+            GPU-practical framework of error-bounded lossy compression for scientific data
+            (circa 2020), built to improve SZ's throughput on heterogeneous HPC systems. It
+            focuses on the CUDA backend, with other GPU-parallel backends in development.
+            The project was formerly named cuSZ, which remains the short form.
+          </p>
+          <p>© 2025 Argonne National Laboratory and Oakland University. BSD 3-Clause.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="section" id="how">
+      <div class="wrap">
+        <div class="section-head prose">
+          <h2>How it works</h2>
+        </div>
+        <ol class="steps">
+          <li>The user picks an error mode: absolute (<code>abs</code>), or relative to the data's
+            value range (<code>r2r</code>), and an error bound.</li>
+          <li>Prediction errors are quantized in units of that bound. In-range quant-codes are
+            stored; out-of-range ones are gathered as outliers.</li>
+          <li>The in-range quant-codes go through a Huffman encoder.</li>
+          <li>CPU-SZ adds a DEFLATE pass to exploit repeated patterns; on the GPU, cuSZ+'s RLE
+            plays the same role.</li>
+        </ol>
+        <p class="prose note">There are real differences between CPU-SZ and pSZ/cuSZ; the papers
+          below carry the detail.</p>
+      </div>
+    </section>
+
+    <section class="section" id="variants">
+      <div class="wrap">
+        <div class="section-head prose">
+          <h2>Variants</h2>
+          <span class="hint">each trades quality, ratio, and speed differently</span>
+        </div>
+        <ul class="themes">
+          <li>
+            <h3>cuSZ <span class="when">· Tian et al., '20, '21</span></h3>
+            <p>The basic framework: an <em>N</em>-D Lorenzo predictor, a histogram, and Huffman
+              encoding. A balanced compression ratio and quality.</p>
+          </li>
+          <li>
+            <h3>cuSZ+ (hi-ratio) <span class="when">· Tian et al., '21</span></h3>
+            <p>A de-redundancy RLE pass ahead of Huffman, from compressibility research showing
+              RLE wins on highly compressible data.</p>
+          </li>
+          <li>
+            <h3>FZ-GPU <span class="when">· Zhang, Tian et al., '23</span></h3>
+            <p>Prediction plus de-redundancy only, no histogram or Huffman: it prioritizes
+              data-processing speed.</p>
+          </li>
+          <li>
+            <h3>cuSZ-<em>i</em> <span class="when">· Liu, Tian, Wu et al., '24</span></h3>
+            <p>A spline-interpolative 3-D predictor with QoZ-like methods, for substantially
+              better reconstruction quality and compression ratio.</p>
+          </li>
+          <li>
+            <h3>cuSZ-Hi <span class="when">· Wu and Pan et al., '25</span></h3>
+            <p>A 2-D/3-D spline predictor feeding two encoder paths, one tuned for ratio and one
+              for throughput.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" id="install">
+      <div class="wrap">
+        <div class="section-head prose">
+          <h2>Install and run</h2>
+        </div>
+        <div class="panel">
+          <p class="panel-label">Spack</p>
+          <pre><code>spack install cusz
+spack load cusz</code></pre>
+        </div>
+        <div class="panel">
+          <p class="panel-label">Compress, then reconstruct</p>
+          <pre><code>./bin/cusz -f32 -m r2r -e 1e-4 -i data.f32 -D parihaka -z
+./bin/cusz -i data.f32.cusza -x --origin data.f32 --skip write.x</code></pre>
+          <p class="panel-note"><code>--skip write.x</code> checks compression quality without
+            writing the reconstruction to disk. <code>-V</code> reports the machine it ran on.</p>
+        </div>
+        <p class="prose note">Fuller instructions live in the wiki
+          (<a href="https://github.com/szcompressor/cuSZ/wiki/Build-and-Install">build and install</a>,
+          <a href="https://github.com/szcompressor/cuSZ/wiki/Use">command-line use</a>,
+          <a href="https://github.com/szcompressor/cuSZ/wiki/API">API reference</a>), and the
+          supported toolchains on the
+          <a href="https://github.com/szcompressor/cuSZ/tree/jtian0-doc-1/doc">doc branch</a>.
+        </p>
+      </div>
+    </section>
+
+    <!-- Disabled for now: numbers are from 2dec57f (Jan 2021) and want a refresh.
+  <section class="section" id="bench">
+    <div class="wrap">
+      <div class="section-head prose">
+        <h2>Kernel throughput</h2>
+        <span class="hint">overall, GB/s</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>GPU</th><th>1D HACC</th><th>2D CESM</th><th>3D NYX</th><th>memcpy</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>V100</td><td>35.0</td><td>35.8</td><td>39.1</td><td>713.1</td></tr>
+            <tr><td>RTX 5000</td><td>—</td><td>17.4</td><td>17.7</td><td>364.5</td></tr>
+            <tr><td>RTX 2060S</td><td>—</td><td>13.4</td><td>13.3</td><td>379.6</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="prose note">From <code>doc/benchmark.md</code> at <code>2dec57f</code>, measured on
+        TACC Longhorn. Overall throughput leaves out codebook construction, on the assumption of a
+        prebuilt tree, and kernel launch overhead.</p>
+    </div>
+  </section>
+  -->
+
+
+    <section class="section" id="papers">
+      <div class="wrap">
+        <div class="section-head prose">
+          <h2>Papers</h2>
+          <span class="hint">chronologically ordered</span>
+        </div>
+        <ol class="pubs">
+          <li>
+            <p class="pub"><span class="chip">PACT '20</span><span class="pub-title">cuSZ: An
+                efficient GPU-based error-bounded lossy compression framework for scientific
+                data</span> <span class="where">The basic framework: fine-grained <em>N</em>-D
+                error-controlled construction plus coarse-grained lossless encoding.</span> <span class="links quiet"><a
+                  href="https://dl.acm.org/doi/10.1145/3410463.3414624">ACM</a> <a
+                  href="https://arxiv.org/abs/2007.09625">arXiv</a></span></p>
+          </li>
+          <li>
+            <p class="pub"><span class="chip">CLUSTER '21</span><span class="pub-title">Optimizing
+                error-bounded lossy compression for scientific data on GPUs</span>
+              <span class="where">Throughput via fine-grained <em>N</em>-D reconstruction, and
+                ratio when the data is smooth.</span> <span class="links quiet"><a
+                  href="https://doi.ieeecomputersociety.org/10.1109/Cluster48925.2021.00047">IEEE</a> <a
+                  href="https://arxiv.org/abs/2105.12912">arXiv</a></span>
+            </p>
+          </li>
+          <li>
+            <p class="pub"><span class="chip">SC '24</span><span class="pub-title">cuSZ-<em>i</em>:
+                High-ratio scientific lossy compression on GPUs with optimized multi-level
+                interpolation</span> <span class="where">Spline interpolation for high-ratio
+                compression and high-quality reconstruction, plus synergetic lossless
+                encoding.</span> <span class="links quiet"><a
+                  href="https://doi.ieeecomputersociety.org/10.1109/SC41406.2024.00019">IEEE</a> <a
+                  href="https://arxiv.org/abs/2312.05492">arXiv</a></span></p>
+          </li>
+        </ol>
+        <p class="prose note">Citing pSZ/cuSZ: BibTeX entries live in
+          <a href="https://github.com/szcompressor/cuSZ/blob/master/doc/psz-cusz.bib">doc/psz-cusz.bib</a>.
+        </p>
+      </div>
+    </section>
+
+    <section class="section" id="data">
+      <div class="wrap">
+        <div class="section-head prose">
+          <h2>Datasets</h2>
+          <span class="hint">from SDRBench</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Dataset</th>
+                <th>Dim.</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>EXAALT</td>
+                <td>1D</td>
+                <td>molecular dynamics simulation</td>
+              </tr>
+              <tr>
+                <td>HACC</td>
+                <td>1D</td>
+                <td>cosmology, particle simulation</td>
+              </tr>
+              <tr>
+                <td>CESM-ATM</td>
+                <td>2D</td>
+                <td>climate simulation</td>
+              </tr>
+              <tr>
+                <td>EXAFEL</td>
+                <td>2D</td>
+                <td>images from the LCLS instrument</td>
+              </tr>
+              <tr>
+                <td>Hurricane ISABEL</td>
+                <td>3D</td>
+                <td>weather simulation</td>
+              </tr>
+              <tr>
+                <td>NYX</td>
+                <td>3D</td>
+                <td>adaptive mesh hydrodynamics and N-body cosmology</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="prose note">Sample data ships in the repo's <code>data</code> directory; more is
+          available from <a href="https://sdrbench.github.io/">SDRBench</a>.</p>
+      </div>
+    </section>
+
+    <section class="section" id="people">
+      <div class="wrap">
+        <div class="section-head prose">
+          <h2>People</h2>
+        </div>
+        <div class="bio prose">
+          <p><strong>Developers.</strong> Jiannan Tian (primary/PI), Robert Underwood
+            (deployment), Jinyang Liu, Shixun Wu, Jinwen Pan (cuSZ-<em>i</em>/Hi), Cody Rivera
+            (Huffman coding), Sheng Di and Franck Cappello (administrative PIs).</p>
+          <p><strong>Contributors.</strong> Jon Calhoun, Wenyu Gai, Megan Hickman Fulp, Xin Liang,
+            Kai Zhao.</p>
+          <p>With thanks to Dingwen Tao, who advised the project from 2020 to 2024, and to
+            Dominique LaSalle (NVIDIA), mentor at the Argonne GPU Hackathon 2021.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="funding">
+      <div class="wrap">
+        <div class="section-head prose">
+          <h2>Acknowledgements</h2>
+        </div>
+        <p class="prose note">Supported by the Exascale Computing Project (17-SC-20-SC), a
+          collaboration of the DOE Office of Science and the NNSA; by the U.S. Department of
+          Energy, Office of Science, under contract DE-AC02-06CH11357; and by the National
+          Science Foundation under grants
+          <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=2104023">CSSI/OAC #2104023</a>,
+          <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=2247080">#2247080</a>,
+          <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=2247060">OAC #2247060</a>,
+          <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=2311875">CSSI/OAC #2311875</a>,
+          and <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=2311876">#2311876</a>.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>Site © Mercury High-Performance Group</span>
+    </div>
+  </footer>
+
+  <div class="theme-switch quiet" role="group" aria-label="Colour theme">
+    <button type="button" data-theme-set="light">Light</button>
+    <button type="button" data-theme-set="dark">Dark</button>
+    <button type="button" data-theme-set="auto">Auto</button>
+  </div>
+
+  <script>
+    // light/dark/auto. `auto` removes the attribute and lets the system's own
+    // prefers-color-scheme decide, which is why it is the default rather than a
+    // third palette.
+    (() => {
+      const root = document.documentElement
+      const btns = [...document.querySelectorAll('[data-theme-set]')]
+      const read = () => { try { return localStorage.getItem('theme') || 'auto' } catch (e) { return 'auto' } }
+      const apply = (t) => {
+        if (t === 'auto') delete root.dataset.theme
+        else root.dataset.theme = t
+        for (const b of btns) b.setAttribute('aria-pressed', String(b.dataset.themeSet === t))
+      }
+      apply(read())
+      for (const b of btns) b.addEventListener('click', () => {
+        const t = b.dataset.themeSet
+        try { localStorage.setItem('theme', t) } catch (e) { }
+        apply(t)
+      })
+    })()
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,107 @@
+/* ---------- header: full-bleed banner ---------- */
+
+/* The bar bleeds to the viewport so nothing scrolls through beside it; the CELLS
+   are what stay clamped to the text column. */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--bar);
+  color: var(--bar-fg);
+}
+
+.banner {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  max-width: var(--wide);
+  margin: 0 auto;
+  padding: 0;
+  background: var(--bar);
+  list-style: none;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.banner::-webkit-scrollbar { display: none; }
+
+.banner > li { display: flex; flex: 1 1 0; min-width: 0; }
+
+.banner > li + li { border-left: 1px solid var(--bar-rule); }
+
+.banner a,
+.banner .cell {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0;
+  flex: 1;
+  min-width: 0;
+  padding: .34rem .7rem .4rem;
+  color: var(--bar-fg);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background .12s ease, color .12s ease;
+}
+
+.banner .idx {
+  font-size: .58rem;
+  line-height: 1.35;
+  font-weight: 500;
+  letter-spacing: .06em;
+  font-variant-numeric: tabular-nums;
+  color: var(--bar-idx);
+}
+
+.banner .label {
+  font-size: .82rem;
+  line-height: 1.3;
+  font-weight: 400;
+  letter-spacing: -.01em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.banner .brand-cell {
+  flex: 0 0 auto;
+  overflow: hidden;
+  max-width: 14rem;
+  transition: max-width .24s ease, opacity .18s ease;
+}
+
+/* while the page's own name is on screen, the banner's copy is redundant. It
+   collapses to zero width rather than switching off, so the other cells widen
+   into the space instead of jumping. */
+.site-header[data-name-visible] .brand-cell.decorative {
+  max-width: 0;
+  opacity: 0;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .banner .brand-cell { transition: none; }
+}
+
+.banner .brand-cell .label { font-weight: 600; }
+
+.banner .brand-cell .idx { display: flex; align-items: center; gap: .4rem; }
+.banner .brand-cell img { width: 14px; height: 16px; filter: var(--bar-mark-filter); }
+
+.banner a:hover { background: var(--bar-hover); text-decoration: none; }
+
+.banner a[aria-current="page"] { background: var(--bar-current-bg); color: var(--bar-current-fg); }
+.banner a[aria-current="page"] .idx { color: var(--bar-current-idx); }
+.banner a[aria-current="page"]:hover { background: var(--bar-current-bg); }
+
+.banner .ext .idx::after { content: "\2197"; }
+
+@media (max-width: 46rem) {
+  .banner a, .banner .cell { padding: .3rem .7rem .35rem; }
+  .banner .label { font-size: .88rem; }
+  /* grow to fill the bar when there is room, never shrink below the label when
+     there is not -- `0 0 auto` did the second half only, so a narrow window left
+     the cells huddled at the left with dead bar beside them */
+  .banner > li { flex: 1 0 auto; }
+  .banner .brand-cell.decorative { display: none; }
+  .banner { max-width: 100%; }
+}
+
