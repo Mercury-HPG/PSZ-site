@@ -839,6 +839,7 @@ body {
 
 .hero h1 { font-size: 1.28rem; font-weight: 600; letter-spacing: -.012em; }
 .hero .role { font-size: 1.28rem; font-weight: 400; color: var(--muted); margin: 0; max-width: none; }
+.hero .repo-link { margin: .5rem 0 0; font-size: .92rem; color: var(--muted); }
 .hero .bio { margin: 1.6rem 0 0; }
 
 
