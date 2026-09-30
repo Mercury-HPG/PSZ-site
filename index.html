@@ -142,23 +142,46 @@
           <h2>Install and run</h2>
         </div>
         <div class="panel">
-          <p class="panel-label">Spack</p>
-          <pre><code>spack install cusz
-spack load cusz</code></pre>
+          <p class="panel-label">Build from source</p>
+          <pre><code>git clone --recursive https://github.com/szcompressor/cuSZ.git cusz-latest
+cd cusz-latest &amp;&amp; mkdir build &amp;&amp; cd build
+cmake .. -DPSZ_BACKEND=cuda -DPSZ_BUILD_EXAMPLES=on -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_CUDA_ARCHITECTURES="&lt;sm&gt;"
+make -j
+make install</code></pre>
+          <p class="panel-note">Needs CUDA 11.4 onward, a C++17 host compiler (GCC 9 onward or any
+            Clang), and CMake 3.18 onward. Without <code>CMAKE_CUDA_ARCHITECTURES</code> (or the
+            <code>CUDAARCHS</code> environment variable), the build targets <code>75</code> only.</p>
         </div>
         <div class="panel">
           <p class="panel-label">Compress, then reconstruct</p>
-          <pre><code>./bin/cusz -f32 -m r2r -e 1e-4 -i data.f32 -D parihaka -z
-./bin/cusz -i data.f32.cusza -x --origin data.f32 --skip write.x</code></pre>
-          <p class="panel-note"><code>--skip write.x</code> checks compression quality without
-            writing the reconstruction to disk. <code>-V</code> reports the machine it ran on.</p>
+          <pre><code>cusz -t f32 -m r2r -e 1e-4 -i data.f32 -l 3600-1800 -z --report cr
+cusz -i data.f32.cusza -x --compare data.f32 --skip write2disk</code></pre>
+          <p class="panel-note"><code>--skip write2disk</code> checks compression quality without
+            writing the reconstruction to disk. <code>-p</code> picks the pipeline, e.g.
+            <code>-p spl..</code> or <code>-p preset:hicr</code>. <code>-V</code> reports the machine it ran on.</p>
         </div>
-        <p class="prose note">Fuller instructions live in the wiki
-          (<a href="https://github.com/szcompressor/cuSZ/wiki/Build-and-Install">build and install</a>,
-          <a href="https://github.com/szcompressor/cuSZ/wiki/Use">command-line use</a>,
-          <a href="https://github.com/szcompressor/cuSZ/wiki/API">API reference</a>), and the
-          supported toolchains on the
-          <a href="https://github.com/szcompressor/cuSZ/tree/jtian0-doc-1/doc">doc branch</a>.
+        <div class="panel">
+          <p class="panel-label">Python binding</p>
+          <pre><code>CUDAARCHS="&lt;sm&gt;" pip install -e py_ext --no-build-isolation</code></pre>
+          <pre><code>from psz import compress_init, decompress_init
+
+with compress_init(data.shape) as c:  # data: a float32 CuPy array
+    c.compress_process("lrz..", data, 1e-3 * c.compress_extrema(data).rng)
+    header, archive = c.compress_archive()
+
+with decompress_init(header) as dc:
+    xdata = dc.decompress_process(archive)</code></pre>
+          <p class="panel-note"><code>psz</code> is a nanobind binding that works on CuPy arrays;
+            <a href="https://github.com/szcompressor/cuSZ/blob/master/example/src/demo_py.ipynb"><code>example/src/demo_py.ipynb</code></a>
+            walks through it.</p>
+        </div>
+        <p class="prose note">Fuller instructions, including the recommended GCC and Clang
+          combinations, live in the wiki:
+          <a href="https://github.com/szcompressor/cuSZ/wiki/Build-and-Install">build and install</a>,
+          <a href="https://github.com/szcompressor/cuSZ/wiki/Experiments">command-line use</a>,
+          <a href="https://github.com/szcompressor/cuSZ/wiki/API">API reference</a>, and
+          <a href="https://github.com/szcompressor/cuSZ/wiki/API#python">Python</a>.
         </p>
       </div>
     </section>
@@ -287,8 +310,8 @@ spack load cusz</code></pre>
             </tbody>
           </table>
         </div>
-        <p class="prose note">Sample data ships in the repo's <code>data</code> directory; more is
-          available from <a href="https://sdrbench.github.io/">SDRBench</a>.</p>
+        <p class="prose note">The fields are available from
+          <a href="https://sdrbench.github.io/">SDRBench</a>.</p>
       </div>
     </section>
 

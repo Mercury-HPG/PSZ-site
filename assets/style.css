@@ -890,6 +890,7 @@ body {
   color: var(--muted);
 }
 .panel-note { margin: .6rem 0 0; font-size: .9rem; color: var(--muted); }
+.panel pre + pre { margin-top: .9rem; }
 
 pre {
   margin: 0;
