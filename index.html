@@ -45,6 +45,8 @@
               class="label">Repo</span></a></li>
         <li><a class="ext" href="https://mercury-hpg.github.io/"><span class="idx"></span><span
               class="label">Lab</span></a></li>
+        <li><a class="ext" href="https://jti.one/"><span class="idx"></span><span
+              class="label">PI</span></a></li>
       </ul>
     </nav>
   </header>
@@ -55,7 +57,8 @@
       <div class="wrap">
         <div class="hero-id">
           <h1>pSZ/cuSZ</h1>
-          <p class="role">A GPU-based error-bounded lossy compressor for scientific data.<a class="repo-link" href="https://github.com/szcompressor/cuSZ" title="szcompressor/cuSZ on GitHub">GitHub</a></p>
+          <p class="role">A GPU-based error-bounded lossy compressor for scientific data.<a class="repo-link"
+              href="https://github.com/szcompressor/cuSZ" title="szcompressor/cuSZ on GitHub">GitHub</a></p>
         </div>
 
         <div class="bio">
@@ -84,8 +87,14 @@
               <li>Basic framework: <em>N</em>-D Lorenzo prediction and Huffman encoding on GPU.</li>
               <li>Algorithmic novelty: fully parallelized <em>N</em>-D Lorenzo prediction and reverse prediction.</li>
               <li>Pipeline novelty: alternative route for cases with extremely "smooth" data.</li>
-              <li><span class="chip">PACT '20</span> cuSZ: An efficient GPU-based error-bounded lossy compression framework for scientific data <span class="links quiet"><a href="https://dl.acm.org/doi/10.1145/3410463.3414624">ACM</a> <a href="https://arxiv.org/abs/2007.09625">arXiv</a></span></li>
-              <li><span class="chip">CLUSTER '21</span> Optimizing error-bounded lossy compression for scientific data on GPUs <span class="links quiet"><a href="https://doi.ieeecomputersociety.org/10.1109/Cluster48925.2021.00047">IEEE</a> <a href="https://arxiv.org/abs/2105.12912">arXiv</a></span></li>
+              <li><span class="chip">PACT '20</span> cuSZ: An efficient GPU-based error-bounded lossy compression
+                framework for scientific data <span class="links quiet"><a
+                    href="https://dl.acm.org/doi/10.1145/3410463.3414624">ACM</a> <a
+                    href="https://arxiv.org/abs/2007.09625">arXiv</a></span></li>
+              <li><span class="chip">CLUSTER '21</span> Optimizing error-bounded lossy compression for scientific data
+                on GPUs <span class="links quiet"><a
+                    href="https://doi.ieeecomputersociety.org/10.1109/Cluster48925.2021.00047">IEEE</a> <a
+                    href="https://arxiv.org/abs/2105.12912">arXiv</a></span></li>
             </ul>
           </li>
           <li>
@@ -96,11 +105,22 @@
           <li>
             <h3>cuSZ-<em>i</em> (SC '24) and cuSZ-Hi (SC '25)</h3>
             <ul>
-              <li>SZ3/QoZ-HPEZ pipeline on GPU: spline-interpolation-based data reconstruction with high rate-distortion capability.</li>
-              <li>Pipeline novelty: GPU-realistic ratio-boosting synergetic encoding stage applied to the original framework is designed (cuSZ-<em>i</em>).</li>
-              <li>Pipeline novelty: It is further discussed in cuSZ-Hi using the sub-pipeline composition by the <a href="https://github.com/burtscher/LC-framework">LC framework</a> (a research project led by <a href="https://userweb.cs.txstate.edu/~burtscher/">Dr. Martin Burtscher</a>), forming two presets, HiTP and HiCR, further pushing the boundary of achievable rate-distortion on GPU.</li>
-              <li><span class="chip">SC '24</span> cuSZ-<em>i</em>: High-ratio scientific lossy compression on GPUs with optimized multi-level interpolation <span class="links quiet"><a href="https://doi.ieeecomputersociety.org/10.1109/SC41406.2024.00019">IEEE</a> <a href="https://arxiv.org/abs/2312.05492">arXiv</a></span></li>
-              <li><span class="chip">SC '25</span> Boosting scientific error-bounded lossy compression through optimized synergistic lossy-lossless orchestration <span class="links quiet"><a href="https://dl.acm.org/doi/10.1145/3712285.3759798">ACM</a> <a href="https://arxiv.org/abs/2507.11165">arXiv</a></span></li>
+              <li>SZ3/QoZ-HPEZ pipeline on GPU: spline-interpolation-based data reconstruction with high rate-distortion
+                capability.</li>
+              <li>Pipeline novelty: GPU-realistic ratio-boosting synergetic encoding stage applied to the original
+                framework is designed (cuSZ-<em>i</em>).</li>
+              <li>Pipeline novelty: It is further discussed in cuSZ-Hi using the sub-pipeline composition by the <a
+                  href="https://github.com/burtscher/LC-framework">LC framework</a> (a research project led by <a
+                  href="https://userweb.cs.txstate.edu/~burtscher/">Dr. Martin Burtscher</a>), forming two presets, HiTP
+                and HiCR, further pushing the boundary of achievable rate-distortion on GPU.</li>
+              <li><span class="chip">SC '24</span> cuSZ-<em>i</em>: High-ratio scientific lossy compression on GPUs with
+                optimized multi-level interpolation <span class="links quiet"><a
+                    href="https://doi.ieeecomputersociety.org/10.1109/SC41406.2024.00019">IEEE</a> <a
+                    href="https://arxiv.org/abs/2312.05492">arXiv</a></span></li>
+              <li><span class="chip">SC '25</span> Boosting scientific error-bounded lossy compression through optimized
+                synergistic lossy-lossless orchestration <span class="links quiet"><a
+                    href="https://dl.acm.org/doi/10.1145/3712285.3759798">ACM</a> <a
+                    href="https://arxiv.org/abs/2507.11165">arXiv</a></span></li>
             </ul>
           </li>
         </ul>
@@ -127,7 +147,8 @@ make -j
 make install</code></pre>
           <p class="panel-note">Needs CUDA 11.4 onward, a C++17 host compiler (GCC 9 onward or any
             Clang), and CMake 3.18 onward. Without <code>CMAKE_CUDA_ARCHITECTURES</code> (or the
-            <code>CUDAARCHS</code> environment variable), the build targets <code>75</code> only.</p>
+            <code>CUDAARCHS</code> environment variable), the build targets <code>75</code> only.
+          </p>
         </div>
         <div class="panel">
           <p class="panel-label">Compress, then reconstruct</p>
@@ -135,7 +156,8 @@ make install</code></pre>
 cusz -i data.f32.cusza -x --compare data.f32 --skip write2disk</code></pre>
           <p class="panel-note"><code>--skip write2disk</code> checks compression quality without
             writing the reconstruction to disk. <code>-p</code> picks the pipeline, e.g.
-            <code>-p spl..</code> or <code>-p preset:hicr</code>. <code>-V</code> reports the machine it ran on.</p>
+            <code>-p spl..</code> or <code>-p preset:hicr</code>. <code>-V</code> reports the machine it ran on.
+          </p>
         </div>
         <div class="panel">
           <p class="panel-label">Python binding</p>
@@ -149,8 +171,10 @@ with compress_init(data.shape) as c:  # data: a float32 CuPy array
 with decompress_init(header) as dc:
     xdata = dc.decompress_process(archive)</code></pre>
           <p class="panel-note"><code>psz</code> is a nanobind binding that works on CuPy arrays;
-            <a href="https://github.com/szcompressor/cuSZ/blob/master/example/src/demo_py.ipynb"><code>example/src/demo_py.ipynb</code></a>
-            walks through it.</p>
+            <a
+              href="https://github.com/szcompressor/cuSZ/blob/master/example/src/demo_py.ipynb"><code>example/src/demo_py.ipynb</code></a>
+            walks through it.
+          </p>
         </div>
         <p class="prose note">Fuller instructions, including the recommended GCC and Clang
           combinations, live in the wiki:
@@ -238,7 +262,8 @@ with decompress_init(header) as dc:
           </table>
         </div>
         <p class="prose note">The fields are available from
-          <a href="https://sdrbench.github.io/">SDRBench</a>.</p>
+          <a href="https://sdrbench.github.io/">SDRBench</a>.
+        </p>
       </div>
     </section>
 
