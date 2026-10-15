@@ -8,7 +8,7 @@
   <meta name="description"
     content="pSZ/cuSZ: a GPU-based error-bounded lossy compressor for scientific data, and the first GPU-practical framework of its kind.">
   <meta name="color-scheme" content="light dark">
-  <meta name="theme-color" content="#0070a3">
+  <meta name="theme-color" content="#4169e1">
   <link rel="canonical" href="https://mercury-hpg.github.io/PSZ-site/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,11 +38,9 @@
             <span class="label">pSZ</span>
           </a>
         </li>
-        <li><a href="#how"><span class="idx">01</span><span class="label">How</span></a></li>
-        <li><a href="#variants"><span class="idx">02</span><span class="label">Variants</span></a></li>
-        <li><a href="#papers"><span class="idx">03</span><span class="label">Papers</span></a></li>
-        <li><a href="#data"><span class="idx">04</span><span class="label">Data</span></a></li>
-        <li><a href="#install"><span class="idx">05</span><span class="label">Install</span></a></li>
+        <li><a href="#variants"><span class="idx">01</span><span class="label">Variants</span></a></li>
+        <li><a href="#data"><span class="idx">02</span><span class="label">Data</span></a></li>
+        <li><a href="#install"><span class="idx">03</span><span class="label">Install</span></a></li>
         <li><a class="ext" href="https://github.com/szcompressor/cuSZ"><span class="idx"></span><span
               class="label">Repo</span></a></li>
         <li><a class="ext" href="https://mercury-hpg.github.io/"><span class="idx"></span><span
@@ -57,10 +55,8 @@
       <div class="wrap">
         <div class="hero-id">
           <h1>pSZ/cuSZ</h1>
-          <p class="role">A GPU-based error-bounded lossy compressor for scientific data.</p>
+          <p class="role">A GPU-based error-bounded lossy compressor for scientific data.<a class="repo-link" href="https://github.com/szcompressor/cuSZ" title="szcompressor/cuSZ on GitHub">GitHub</a></p>
         </div>
-
-        <p class="repo-link"><a href="https://github.com/szcompressor/cuSZ">github.com/szcompressor/cuSZ</a></p>
 
         <div class="bio">
           <p><strong>pSZ/cuSZ</strong> is a GPU implementation of the
@@ -76,41 +72,21 @@
       </div>
     </section>
 
-    <section class="section" id="how">
-      <div class="wrap">
-        <div class="section-head prose">
-          <h2>How it works</h2>
-        </div>
-        <ol class="steps">
-          <li>The user picks an error mode: absolute (<code>abs</code>), or relative to the data's
-            value range (<code>r2r</code>), and an error bound.</li>
-          <li>Prediction errors are quantized in units of that bound. In-range quant-codes are
-            stored; out-of-range ones are gathered as outliers.</li>
-          <li>The in-range quant-codes go through a Huffman encoder.</li>
-          <li>CPU-SZ adds a DEFLATE pass to exploit repeated patterns; on the GPU, cuSZ+'s RLE
-            plays the same role.</li>
-        </ol>
-        <p class="prose note">There are real differences between CPU-SZ and pSZ/cuSZ; the papers
-          below carry the detail.</p>
-      </div>
-    </section>
-
     <section class="section" id="variants">
       <div class="wrap">
         <div class="section-head prose">
           <h2>Variants</h2>
-          <span class="hint">each trades quality, ratio, and speed differently</span>
         </div>
         <ul class="themes">
           <li>
-            <h3>cuSZ <span class="when">· Tian et al., '20, '21</span></h3>
-            <p>The basic framework: an <em>N</em>-D Lorenzo predictor, a histogram, and Huffman
-              encoding. A balanced compression ratio and quality.</p>
-          </li>
-          <li>
-            <h3>cuSZ+ (hi-ratio) <span class="when">· Tian et al., '21</span></h3>
-            <p>A de-redundancy RLE pass ahead of Huffman, from compressibility research showing
-              RLE wins on highly compressible data.</p>
+            <h3>cuSZ (PACT '20) and cuSZ+ (CLUSTER '21)</h3>
+            <ul>
+              <li>Basic framework: <em>N</em>-D Lorenzo prediction and Huffman encoding on GPU.</li>
+              <li>Algorithmic novelty: fully parallelized <em>N</em>-D Lorenzo prediction and reverse prediction.</li>
+              <li>Pipeline novelty: alternative route for cases with extremely "smooth" data.</li>
+              <li><span class="chip">PACT '20</span> cuSZ: An efficient GPU-based error-bounded lossy compression framework for scientific data <span class="links quiet"><a href="https://dl.acm.org/doi/10.1145/3410463.3414624">ACM</a> <a href="https://arxiv.org/abs/2007.09625">arXiv</a></span></li>
+              <li><span class="chip">CLUSTER '21</span> Optimizing error-bounded lossy compression for scientific data on GPUs <span class="links quiet"><a href="https://doi.ieeecomputersociety.org/10.1109/Cluster48925.2021.00047">IEEE</a> <a href="https://arxiv.org/abs/2105.12912">arXiv</a></span></li>
+            </ul>
           </li>
           <li>
             <h3>FZ-GPU <span class="when">· Zhang, Tian et al., '23</span></h3>
@@ -118,21 +94,21 @@
               data-processing speed.</p>
           </li>
           <li>
-            <h3>SZp-CUDA / GSZ <span class="when">· Huang et al., '23, '24</span></h3>
-            <p>A single-kernel 1-D predictor plus de-redundancy pass, also prioritizing
-              data-processing speed.</p>
-          </li>
-          <li>
-            <h3>cuSZ-<em>i</em> <span class="when">· Liu, Tian, Wu et al., '24</span></h3>
-            <p>A spline-interpolative 3-D predictor with QoZ-like methods, for substantially
-              better reconstruction quality and compression ratio.</p>
-          </li>
-          <li>
-            <h3>cuSZ-Hi <span class="when">· Wu and Pan et al., '25</span></h3>
-            <p>A 2-D/3-D spline predictor feeding two encoder paths, one tuned for ratio and one
-              for throughput.</p>
+            <h3>cuSZ-<em>i</em> (SC '24) and cuSZ-Hi (SC '25)</h3>
+            <ul>
+              <li>SZ3/QoZ-HPEZ pipeline on GPU: spline-interpolation-based data reconstruction with high rate-distortion capability.</li>
+              <li>Pipeline novelty: GPU-realistic ratio-boosting synergetic encoding stage applied to the original framework is designed (cuSZ-<em>i</em>).</li>
+              <li>Pipeline novelty: It is further discussed in cuSZ-Hi using the sub-pipeline composition by the <a href="https://github.com/burtscher/LC-framework">LC framework</a> (a research project led by <a href="https://userweb.cs.txstate.edu/~burtscher/">Dr. Martin Burtscher</a>), forming two presets, HiTP and HiCR, further pushing the boundary of achievable rate-distortion on GPU.</li>
+              <li><span class="chip">SC '24</span> cuSZ-<em>i</em>: High-ratio scientific lossy compression on GPUs with optimized multi-level interpolation <span class="links quiet"><a href="https://doi.ieeecomputersociety.org/10.1109/SC41406.2024.00019">IEEE</a> <a href="https://arxiv.org/abs/2312.05492">arXiv</a></span></li>
+              <li><span class="chip">SC '25</span> Boosting scientific error-bounded lossy compression through optimized synergistic lossy-lossless orchestration <span class="links quiet"><a href="https://dl.acm.org/doi/10.1145/3712285.3759798">ACM</a> <a href="https://arxiv.org/abs/2507.11165">arXiv</a></span></li>
+            </ul>
           </li>
         </ul>
+        <p class="prose note">Citing pSZ/cuSZ: please cite
+          <code>\cite{tian2020cusz,tian2021cuszplus,liu_tian_wu2024cuszi,wu_pan2025cuszhi}</code>, with
+          the BibTeX entries in
+          <a href="https://github.com/szcompressor/cuSZ/blob/master/doc/psz-cusz.bib">doc/psz-cusz.bib</a>.
+        </p>
       </div>
     </section>
 
@@ -211,55 +187,6 @@ with decompress_init(header) as dc:
     </div>
   </section>
   -->
-
-
-    <section class="section" id="papers">
-      <div class="wrap">
-        <div class="section-head prose">
-          <h2>Papers</h2>
-          <span class="hint">chronologically ordered</span>
-        </div>
-        <ol class="pubs">
-          <li>
-            <p class="pub"><span class="chip">PACT '20</span><span class="pub-title">cuSZ: An
-                efficient GPU-based error-bounded lossy compression framework for scientific
-                data</span> <span class="where">The basic framework: fine-grained <em>N</em>-D
-                error-controlled construction plus coarse-grained lossless encoding.</span> <span class="links quiet"><a
-                  href="https://dl.acm.org/doi/10.1145/3410463.3414624">ACM</a> <a
-                  href="https://arxiv.org/abs/2007.09625">arXiv</a></span></p>
-          </li>
-          <li>
-            <p class="pub"><span class="chip">CLUSTER '21</span><span class="pub-title">Optimizing
-                error-bounded lossy compression for scientific data on GPUs</span>
-              <span class="where">Throughput via fine-grained <em>N</em>-D reconstruction, and
-                ratio when the data is smooth.</span> <span class="links quiet"><a
-                  href="https://doi.ieeecomputersociety.org/10.1109/Cluster48925.2021.00047">IEEE</a> <a
-                  href="https://arxiv.org/abs/2105.12912">arXiv</a></span>
-            </p>
-          </li>
-          <li>
-            <p class="pub"><span class="chip">SC '24</span><span class="pub-title">cuSZ-<em>i</em>:
-                High-ratio scientific lossy compression on GPUs with optimized multi-level
-                interpolation</span> <span class="where">Spline interpolation for high-ratio
-                compression and high-quality reconstruction, plus synergetic lossless
-                encoding.</span> <span class="links quiet"><a
-                  href="https://doi.ieeecomputersociety.org/10.1109/SC41406.2024.00019">IEEE</a> <a
-                  href="https://arxiv.org/abs/2312.05492">arXiv</a></span></p>
-          </li>
-          <li>
-            <p class="pub"><span class="chip">SC '25</span><span class="pub-title">Boosting scientific
-                error-bounded lossy compression through optimized synergistic lossy-lossless
-                orchestration</span> <span class="where">Ratio gains from the LC framework's lossless
-                codec composition, plus HiTP and HiCR modes atop cuSZ-<em>i</em>.</span> <span class="links quiet"><a
-                  href="https://dl.acm.org/doi/10.1145/3712285.3759798">ACM</a> <a
-                  href="https://arxiv.org/abs/2507.11165">arXiv</a></span></p>
-          </li>
-        </ol>
-        <p class="prose note">Citing pSZ/cuSZ: BibTeX entries live in
-          <a href="https://github.com/szcompressor/cuSZ/blob/master/doc/psz-cusz.bib">doc/psz-cusz.bib</a>.
-        </p>
-      </div>
-    </section>
 
     <section class="section" id="data">
       <div class="wrap">
@@ -345,7 +272,9 @@ with decompress_init(header) as dc:
           <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=2247080">#2247080</a>,
           <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=2247060">OAC #2247060</a>,
           <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=2311875">CSSI/OAC #2311875</a>,
-          and <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=2311876">#2311876</a>.
+          <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=2311876">#2311876</a>,
+          <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=2514036">CSSI/OAC #2514036</a>,
+          and <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=2609480">#2609480</a>.
         </p>
       </div>
     </section>

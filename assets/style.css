@@ -5,7 +5,7 @@
 :root {
   /* the banner bar. These are the ONLY per-site part of the banner: the rules in
      the header block below are identical across the sites that share it. */
-  --bar: #0070a3;             /* the banner block: C, darkened to carry white */
+  --bar: #4169e1;             /* the banner block */
   --bar-fg: #ffffff;
   --bar-idx: rgba(255, 255, 255, .62);
   --bar-rule: rgba(255, 255, 255, .3);
@@ -22,10 +22,10 @@
   --muted: #6e6e6e;
   --rule: #e4e4e4;
   --rule-strong: #c9c9c9;
-  --accent: #0070a3;          /* C (#008ecc), darkened for text on white */
+  --accent: #4169e1;          /* RoyalBlue */
   --accent-fg: #ffffff;
-  --accent-soft: #e6f2f8;
-  --accent-line: #0070a3;
+  --accent-soft: #e9eefc;
+  --accent-line: #4169e1;
   --bar-fg: #ffffff;
 
   --prose: 800px;
@@ -39,7 +39,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bar: #005a82;
+    --bar: #2f4cb3;
     --bar-current-fg: var(--fg);
     --bg: #121212;
     --surface: #1b1b1b;
@@ -49,17 +49,17 @@
     --muted: #8a8a8a;
     --rule: #232323;
     --rule-strong: #3a3a3a;
-    --accent: #5cc4f0;         /* C, lifted to carry on a dark page */
+    --accent: #8aa4f5;         /* RoyalBlue, lifted to carry on a dark page */
     --accent-fg: #000000;
-    --accent-soft: #0b2430;
-    --accent-line: #5cc4f0;
+    --accent-soft: #1a2340;
+    --accent-line: #8aa4f5;
     --bar-fg: #ffffff;
     --shadow: 0 1px 2px rgba(0, 0, 0, .6), 0 8px 24px -14px rgba(0, 0, 0, .9);
   }
 }
 
   :root[data-theme="dark"] {
-    --bar: #005a82;
+    --bar: #2f4cb3;
     --bar-current-fg: var(--fg);
     --bg: #121212;
     --surface: #1b1b1b;
@@ -69,10 +69,10 @@
     --muted: #8a8a8a;
     --rule: #232323;
     --rule-strong: #3a3a3a;
-    --accent: #5cc4f0;         /* C, lifted to carry on a dark page */
+    --accent: #8aa4f5;         /* RoyalBlue, lifted to carry on a dark page */
     --accent-fg: #000000;
-    --accent-soft: #0b2430;
-    --accent-line: #5cc4f0;
+    --accent-soft: #1a2340;
+    --accent-line: #8aa4f5;
     --bar-fg: #ffffff;
     --shadow: 0 1px 2px rgba(0, 0, 0, .6), 0 8px 24px -14px rgba(0, 0, 0, .9);
   }
@@ -565,6 +565,9 @@ p:last-child { margin-bottom: 0; }
 
 .themes p { margin: 0; color: var(--fg-soft); font-size: .92rem; }
 
+.themes li > ul { margin: .3rem 0 0; padding-left: 1.1rem; color: var(--fg-soft); font-size: .92rem; }
+.themes li > ul > li { padding: .1rem 0; border: 0; }
+
 /* ---------- project page bits ---------- */
 
 /* The hero row still wants to be a flex line; a paper's links do NOT -- they are
@@ -741,9 +744,9 @@ code { font-size: .92em; color: var(--fg); }
   --rule-strong: #c6c6cb;
   --surface: #ffffff;
   --surface-2: #ececf0;
-  --accent: #0066cc;
-  --accent-soft: #e8f0fb;
-  --accent-line: #0066cc;
+  --accent: #4169e1;
+  --accent-soft: #e9eefc;
+  --accent-line: #4169e1;
   --bar: rgba(245, 245, 247, .82);
   --bar-fg: #1d1d1f;
   --bar-idx: rgba(0, 0, 0, .45);
@@ -766,8 +769,8 @@ code { font-size: .92em; color: var(--fg); }
     --rule-strong: #48484d;
     --surface: #2a2a2e;
     --surface-2: #323237;
-    --accent: #6cb0ff;
-    --accent-soft: #16283d;
+    --accent: #8aa4f5;
+    --accent-soft: #1a2340;
     --bar: rgba(29, 29, 31, .82);
     --bar-fg: #f5f5f7;
     --bar-idx: rgba(255, 255, 255, .5);
@@ -786,8 +789,8 @@ code { font-size: .92em; color: var(--fg); }
   --rule-strong: #48484d;
   --surface: #2a2a2e;
   --surface-2: #323237;
-  --accent: #6cb0ff;
-  --accent-soft: #16283d;
+  --accent: #8aa4f5;
+  --accent-soft: #1a2340;
   --bar: rgba(29, 29, 31, .82);
   --bar-fg: #f5f5f7;
   --bar-idx: rgba(255, 255, 255, .5);
@@ -839,7 +842,24 @@ body {
 
 .hero h1 { font-size: 1.28rem; font-weight: 600; letter-spacing: -.012em; }
 .hero .role { font-size: 1.28rem; font-weight: 400; color: var(--muted); margin: 0; max-width: none; }
-.hero .repo-link { margin: .5rem 0 0; font-size: .92rem; color: var(--muted); }
+/* a small boxed link with a hard offset shadow; it presses in on hover */
+.hero .repo-link {
+  display: inline-block;
+  margin-left: .6rem;
+  padding: .1rem .55rem;
+  border: 1px solid var(--accent);
+  border-radius: 3px;
+  background: var(--surface);
+  box-shadow: 2px 2px 0 var(--accent);
+  color: var(--fg);
+  font-size: .85rem;
+  line-height: 1.5;
+  text-decoration: none;
+  vertical-align: .08em;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.hero .repo-link::after { content: " \2197"; font-size: .9em; }
+.hero .repo-link:hover, .hero .repo-link:focus-visible { transform: translate(1px, 1px); box-shadow: 1px 1px 0 var(--accent); }
 .hero .bio { margin: 1.6rem 0 0; }
 
 
@@ -956,7 +976,7 @@ main { flex: 1 0 auto; }
   --bar-fg: var(--fg);
   --bar-idx: var(--muted);
   --bar-rule: transparent;
-  --bar-hover: #0070a3;
+  --bar-hover: #4169e1;
   --bar-current-bg: rgba(0, 0, 0, .06);
   --bar-current-fg: var(--fg);
   --bar-current-idx: var(--muted);
@@ -972,7 +992,7 @@ main { flex: 1 0 auto; }
     --bar-fg: var(--fg);
     --bar-idx: var(--muted);
     --bar-rule: transparent;
-    --bar-hover: #005a82;
+    --bar-hover: #2f4cb3;
     --bar-current-bg: rgba(255, 255, 255, .09);
     --bar-current-fg: var(--fg);
     --bar-current-idx: var(--muted);
@@ -987,7 +1007,7 @@ main { flex: 1 0 auto; }
   --bar-fg: var(--fg);
   --bar-idx: var(--muted);
   --bar-rule: transparent;
-  --bar-hover: #005a82;
+  --bar-hover: #2f4cb3;
   --bar-current-bg: rgba(255, 255, 255, .09);
   --bar-current-fg: var(--fg);
   --bar-current-idx: var(--muted);
