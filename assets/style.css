@@ -5,7 +5,7 @@
 :root {
   /* the banner bar. These are the ONLY per-site part of the banner: the rules in
      the header block below are identical across the sites that share it. */
-  --bar: #4169e1;             /* the banner block */
+  --bar: #0061bf;             /* the banner block */
   --bar-fg: #ffffff;
   --bar-idx: rgba(255, 255, 255, .62);
   --bar-rule: rgba(255, 255, 255, .3);
@@ -22,24 +22,24 @@
   --muted: #6e6e6e;
   --rule: #e4e4e4;
   --rule-strong: #c9c9c9;
-  --accent: #4169e1;          /* RoyalBlue */
+  --accent: #0061bf;          /* chart cobalt */
   --accent-fg: #ffffff;
-  --accent-soft: #e9eefc;
-  --accent-line: #4169e1;
+  --accent-soft: #dcebf2;
+  --accent-line: #0061bf;
   --bar-fg: #ffffff;
 
   --prose: 800px;
-  --wide: 800px;     /* the column; the banner tracks it, so both scale together */
+  --wide: 816px;     /* the column, 68 character cells of 12px; the banner tracks it */
 
-  --radius: 10px;
-  --radius-sm: 6px;
+  --radius: 4px;
+  --radius-sm: 3px;
 
   --shadow: 0 1px 2px rgba(0, 0, 0, .06), 0 6px 20px -12px rgba(0, 0, 0, .28);
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bar: #2f4cb3;
+    --bar: #0061bf;
     --bar-current-fg: var(--fg);
     --bg: #121212;
     --surface: #1b1b1b;
@@ -49,17 +49,17 @@
     --muted: #8a8a8a;
     --rule: #232323;
     --rule-strong: #3a3a3a;
-    --accent: #8aa4f5;         /* RoyalBlue, lifted to carry on a dark page */
+    --accent: #add3f1;         /* chart blue, for a dark page */
     --accent-fg: #000000;
-    --accent-soft: #1a2340;
-    --accent-line: #8aa4f5;
+    --accent-soft: #102d49;
+    --accent-line: #add3f1;
     --bar-fg: #ffffff;
     --shadow: 0 1px 2px rgba(0, 0, 0, .6), 0 8px 24px -14px rgba(0, 0, 0, .9);
   }
 }
 
   :root[data-theme="dark"] {
-    --bar: #2f4cb3;
+    --bar: #0061bf;
     --bar-current-fg: var(--fg);
     --bg: #121212;
     --surface: #1b1b1b;
@@ -69,10 +69,10 @@
     --muted: #8a8a8a;
     --rule: #232323;
     --rule-strong: #3a3a3a;
-    --accent: #8aa4f5;         /* RoyalBlue, lifted to carry on a dark page */
+    --accent: #add3f1;         /* chart blue, for a dark page */
     --accent-fg: #000000;
-    --accent-soft: #1a2340;
-    --accent-line: #8aa4f5;
+    --accent-soft: #102d49;
+    --accent-line: #add3f1;
     --bar-fg: #ffffff;
     --shadow: 0 1px 2px rgba(0, 0, 0, .6), 0 8px 24px -14px rgba(0, 0, 0, .9);
   }
@@ -89,7 +89,7 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--fg);
-  font: 400 15px/1.5 "IBM Plex Mono", ui-monospace, SFMono-Regular, "SF Mono",
+  font: 400 15px/24px "IBM Plex Mono", ui-monospace, SFMono-Regular, "SF Mono",
         Menlo, Consolas, monospace;
   font-feature-settings: "kern" 1, "liga" 1;
   text-rendering: optimizeLegibility;
@@ -112,7 +112,7 @@ a:hover { text-decoration-color: currentColor; }
 
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
 
-.wrap { width: 100%; max-width: var(--wide); margin: 0 auto; padding: 0 1.25rem; }
+.wrap { width: 100%; max-width: var(--wide); margin: 0 auto; padding: 0 24px; }
 
 /* Deliberately NOT a per-block max-width here: a block that sets `margin: 0`
    later in this file would silently drop the auto margins and sit flush left
@@ -519,11 +519,12 @@ p:last-child { margin-bottom: 0; }
 .site-footer .wrap {
   display: flex;
   flex-wrap: wrap;
-  gap: .5rem 1.25rem;
-  align-items: center;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  gap: 0 1.25rem;
+  align-items: baseline;
+  padding-top: 0;
+  padding-bottom: 0;
   font-size: .85rem;
+  line-height: 24px;                                    /* one grid row; assets/ascii-reveal.js seats the row on a grid line */
   color: var(--muted);
 }
 
@@ -606,7 +607,7 @@ code { font-size: .92em; color: var(--fg); }
   position: fixed;
   bottom: .75rem;
   left: 50%;
-  transform: translateX(calc(min(50vw, var(--wide) / 2) - 1.25rem - 100%));
+  transform: translateX(calc(min(50vw, var(--wide) / 2) - 24px - 100%));
   z-index: 30;
 }
 
@@ -728,30 +729,33 @@ code { font-size: .92em; color: var(--fg); }
   .chip { background: color-mix(in srgb, var(--accent) 13%, var(--bg)); }
 }
 
-/* ---------- classy grey ---------- */
+/* ---------- chart palette ---------- */
 
-/* A quieter register for a product page: a warm-grey canvas with white panels
-   floating on it, a system grotesk for prose, and the monospace kept for the
-   things that are literally code -- labels, chips, commands, tables. */
+/* Ink and warm-ivory paper, with the chart's two blues. Light mode takes the darker cobalt as its
+   primary accent (it pops on ivory) and the lighter blue as the large-area fill; dark mode swaps them.
+     chart-ink    #171717   near-black rules and labels
+     chart-paper  #FAF8F0   the canvas, warm ivory
+     chart-blue   #ADD3F1   dark-mode accent / light-mode fill
+     chart-cobalt #0061BF   light-mode accent / dark-mode fill */
 
 :root {
-  --bg: #f5f5f7;
-  --paper: #ffffff;
-  --fg: #1d1d1f;
-  --fg-soft: #38383d;
-  --muted: #6e6e73;
-  --rule: #d2d2d7;
-  --rule-strong: #c6c6cb;
-  --surface: #ffffff;
-  --surface-2: #ececf0;
-  --accent: #4169e1;
-  --accent-soft: #e9eefc;
-  --accent-line: #4169e1;
-  --bar: rgba(245, 245, 247, .82);
-  --bar-fg: #1d1d1f;
-  --bar-idx: rgba(0, 0, 0, .45);
-  --bar-rule: rgba(0, 0, 0, .12);
-  --bar-hover: rgba(0, 0, 0, .05);
+  --bg: #fefdfb;
+  --paper: #fffffd;
+  --fg: #171717;
+  --fg-soft: #3b3b38;
+  --muted: #6c6b66;
+  --rule: #e2dfd4;
+  --rule-strong: #cdcabf;
+  --surface: #fffffd;
+  --surface-2: #f8f7f1;
+  --accent: #0061bf;
+  --accent-soft: #dcebf2;
+  --accent-line: #0061bf;
+  --bar: rgba(254, 253, 251, .86);
+  --bar-fg: #171717;
+  --bar-idx: rgba(23, 23, 23, .45);
+  --bar-rule: rgba(23, 23, 23, .12);
+  --bar-hover: rgba(23, 23, 23, .05);
   --bar-current-bg: var(--paper);
   --bar-current-fg: var(--accent);
   --bar-current-idx: var(--muted);
@@ -760,42 +764,44 @@ code { font-size: .92em; color: var(--fg); }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #1d1d1f;
-    --paper: #2a2a2e;
-    --fg: #f5f5f7;
-    --fg-soft: #d2d2d7;
-    --muted: #98989d;
-    --rule: #3a3a3f;
-    --rule-strong: #48484d;
-    --surface: #2a2a2e;
-    --surface-2: #323237;
-    --accent: #8aa4f5;
-    --accent-soft: #1a2340;
-    --bar: rgba(29, 29, 31, .82);
-    --bar-fg: #f5f5f7;
-    --bar-idx: rgba(255, 255, 255, .5);
-    --bar-rule: rgba(255, 255, 255, .14);
-    --bar-hover: rgba(255, 255, 255, .07);
+    --bg: #171717;
+    --paper: #1f1f1e;
+    --fg: #faf8f0;
+    --fg-soft: #d9d7ce;
+    --muted: #a3a198;
+    --rule: #2d2d2b;
+    --rule-strong: #444441;
+    --surface: #1f1f1e;
+    --surface-2: #2a2a28;
+    --accent: #add3f1;
+    --accent-soft: #102d49;
+    --accent-line: #add3f1;
+    --bar: rgba(23, 23, 23, .86);
+    --bar-fg: #faf8f0;
+    --bar-idx: rgba(250, 248, 240, .5);
+    --bar-rule: rgba(250, 248, 240, .14);
+    --bar-hover: rgba(250, 248, 240, .07);
   }
 }
 
 :root[data-theme="dark"] {
-  --bg: #1d1d1f;
-  --paper: #2a2a2e;
-  --fg: #f5f5f7;
-  --fg-soft: #d2d2d7;
-  --muted: #98989d;
-  --rule: #3a3a3f;
-  --rule-strong: #48484d;
-  --surface: #2a2a2e;
-  --surface-2: #323237;
-  --accent: #8aa4f5;
-  --accent-soft: #1a2340;
-  --bar: rgba(29, 29, 31, .82);
-  --bar-fg: #f5f5f7;
-  --bar-idx: rgba(255, 255, 255, .5);
-  --bar-rule: rgba(255, 255, 255, .14);
-  --bar-hover: rgba(255, 255, 255, .07);
+  --bg: #171717;
+  --paper: #1f1f1e;
+  --fg: #faf8f0;
+  --fg-soft: #d9d7ce;
+  --muted: #a3a198;
+  --rule: #2d2d2b;
+  --rule-strong: #444441;
+  --surface: #1f1f1e;
+  --surface-2: #2a2a28;
+  --accent: #add3f1;
+  --accent-soft: #102d49;
+  --accent-line: #add3f1;
+  --bar: rgba(23, 23, 23, .86);
+  --bar-fg: #faf8f0;
+  --bar-idx: rgba(250, 248, 240, .5);
+  --bar-rule: rgba(250, 248, 240, .14);
+  --bar-hover: rgba(250, 248, 240, .07);
 }
 
 /* The root, not the body: every rem in this stylesheet then scales with it, so
@@ -840,26 +846,38 @@ body {
   gap: .1rem .55rem;
 }
 
-.hero h1 { font-size: 1.28rem; font-weight: 600; letter-spacing: -.012em; }
-.hero .role { font-size: 1.28rem; font-weight: 400; color: var(--muted); margin: 0; max-width: none; }
-/* a small boxed link with a hard offset shadow; it presses in on hover */
+.hero h1 { font-size: 1.2rem; font-weight: 600; letter-spacing: -.012em; }
+.hero .role { font-size: 1.2rem; font-weight: 400; color: var(--muted); margin: 0; max-width: none; }
+/* the GitHub link wears the same frame as the windows: a thin light-blue border, a hard offset shadow, both turning cobalt on hover */
 .hero .repo-link {
+  --frame: #8fb4dc;
+  --frame-shadow: #add3f1;
   display: inline-block;
-  margin-left: .6rem;
-  padding: .1rem .55rem;
-  border: 1px solid var(--accent);
-  border-radius: 3px;
-  background: var(--surface);
-  box-shadow: 2px 2px 0 var(--accent);
+  flex: none;
+  margin-left: auto;                                    /* the title on the left, the button flush to the right edge */
+  margin-right: 5px;                                    /* room for the button's offset shadow */
+  padding: .1rem .6rem;
+  border: 1px solid var(--frame);
+  border-radius: 2px;
+  background: var(--paper);
+  box-shadow: 4px 4px 0 var(--frame-shadow), 4px 4px 0 1px var(--frame);
   color: var(--fg);
   font-size: .85rem;
   line-height: 1.5;
   text-decoration: none;
-  vertical-align: .08em;
-  transition: transform .12s ease, box-shadow .12s ease;
+  position: relative;
+  top: -3px;                                            /* centre the frame on the title's cap height, not its baseline */
+  transition: box-shadow .18s ease, border-color .18s ease;
 }
 .hero .repo-link::after { content: " \2197"; font-size: .9em; }
-.hero .repo-link:hover, .hero .repo-link:focus-visible { transform: translate(1px, 1px); box-shadow: 1px 1px 0 var(--accent); }
+.hero .repo-link:hover, .hero .repo-link:focus-visible { --frame: #0061bf; --frame-shadow: #0061bf; }
+:root[data-theme="dark"] .hero .repo-link { --frame: #4a6f94; --frame-shadow: #26425c; }
+:root[data-theme="dark"] .hero .repo-link:hover, :root[data-theme="dark"] .hero .repo-link:focus-visible { --frame: #add3f1; --frame-shadow: #add3f1; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .hero .repo-link { --frame: #4a6f94; --frame-shadow: #26425c; }
+  :root:not([data-theme="light"]) .hero .repo-link:hover, :root:not([data-theme="light"]) .hero .repo-link:focus-visible { --frame: #add3f1; --frame-shadow: #add3f1; }
+}
+@media (prefers-reduced-motion: reduce) { .hero .repo-link { transition: none; } }
 .hero .bio { margin: 1.6rem 0 0; }
 
 
@@ -887,7 +905,7 @@ body {
 .card, .themes > li, .people > li, .pubs > li, .panel, .table-wrap {
   background: var(--paper);
   border: 1px solid var(--rule);
-  border-radius: 14px;
+  border-radius: 4px;
 }
 
 .themes, .people, .pubs { display: grid; gap: .55rem; }
@@ -897,7 +915,7 @@ body {
   background: var(--paper);
   border: 1px solid var(--rule);
   border-left: 3px solid var(--accent);
-  border-radius: 14px;
+  border-radius: 4px;
   padding: 1rem 1.15rem;
 }
 
@@ -976,7 +994,7 @@ main { flex: 1 0 auto; }
   --bar-fg: var(--fg);
   --bar-idx: var(--muted);
   --bar-rule: transparent;
-  --bar-hover: #4169e1;
+  --bar-hover: #0061bf;
   --bar-current-bg: rgba(0, 0, 0, .06);
   --bar-current-fg: var(--fg);
   --bar-current-idx: var(--muted);
@@ -992,7 +1010,7 @@ main { flex: 1 0 auto; }
     --bar-fg: var(--fg);
     --bar-idx: var(--muted);
     --bar-rule: transparent;
-    --bar-hover: #2f4cb3;
+    --bar-hover: #0061bf;
     --bar-current-bg: rgba(255, 255, 255, .09);
     --bar-current-fg: var(--fg);
     --bar-current-idx: var(--muted);
@@ -1007,7 +1025,7 @@ main { flex: 1 0 auto; }
   --bar-fg: var(--fg);
   --bar-idx: var(--muted);
   --bar-rule: transparent;
-  --bar-hover: #2f4cb3;
+  --bar-hover: #0061bf;
   --bar-current-bg: rgba(255, 255, 255, .09);
   --bar-current-fg: var(--fg);
   --bar-current-idx: var(--muted);
@@ -1056,3 +1074,170 @@ main { flex: 1 0 auto; }
   .page-head > .role,
   .hero-id > .role { min-width: 100%; }
 }
+
+/* ---------- the guide as small windows: a title bar with a close box, a thin blue frame, and a hard offset shadow ---------- */
+
+.wins { display: grid; gap: 1.5rem 1.5rem; margin: 0 0 1.2rem; }
+@media (min-width: 52rem) {
+  .wins { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+  #variants, #install, .win-stack { grid-column: 1 / -1; }
+}
+
+.win {
+  --frame: #8fb4dc;
+  --frame-shadow: #add3f1;
+  min-width: 0;
+  background: var(--paper);
+  border: 1px solid var(--frame);
+  border-radius: 2px;
+  box-shadow: 5px 5px 0 var(--frame-shadow), 5px 5px 0 1px var(--frame);
+  transition: box-shadow .18s ease, border-color .18s ease;
+}
+.win:hover { --frame: #0061bf; --frame-shadow: #0061bf; }
+:root[data-theme="dark"] .win { --frame: #4a6f94; --frame-shadow: #26425c; }
+:root[data-theme="dark"] .win:hover { --frame: #add3f1; --frame-shadow: #add3f1; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .win { --frame: #4a6f94; --frame-shadow: #26425c; } :root:not([data-theme="light"]) .win:hover { --frame: #add3f1; --frame-shadow: #add3f1; } }
+
+.win-bar {
+  min-height: 2.4rem;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .45rem .7rem .45rem .8rem;
+  border-bottom: 1px solid var(--frame);
+}
+.win-title { margin: 0; font: 500 .84rem/1.2 "IBM Plex Mono", ui-monospace, monospace; color: var(--fg); letter-spacing: 0; }
+.win-x {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--fg);
+  font: 400 1.15rem/1 "IBM Plex Mono", ui-monospace, monospace;
+  padding: .1rem .3rem;
+  cursor: pointer;
+}
+.win-x:hover { color: var(--accent); }
+.win-x:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.win-body { padding: .9rem .9rem 1rem; }
+.win.folded .win-body { display: none; }
+.win.folded .win-bar { border-bottom: 0; }
+
+/* a stack of windows in one grid cell */
+.win-stack { display: grid; gap: 1.5rem; min-width: 0; }
+
+/* tabs in a title bar: file names that switch the window's view */
+.win-bar.win-tabs { padding: 0 .7rem 0 0; }
+.win-tablist { display: flex; align-items: stretch; min-width: 0; }
+.win-tab {
+  appearance: none;
+  border: 0;
+  border-right: 1px solid var(--frame);
+  background: transparent;
+  color: var(--muted);
+  font: 500 .84rem/1.2 "IBM Plex Mono", ui-monospace, monospace;
+  padding: .55rem .95rem;
+  cursor: pointer;
+}
+.win-tab:hover { color: var(--fg); }
+.win-tab[aria-selected="true"] { color: var(--fg); background: color-mix(in srgb, #add3f1 30%, transparent); box-shadow: inset 0 -2px 0 var(--accent); }
+.win-tab:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.win-pane[hidden] { display: none; }
+.win-pane > p.panel-note { margin: .9rem 0 0; font-size: .88rem; color: var(--muted); }
+.win-pane h3 { margin: 0 0 .5rem; font-size: .98rem; line-height: 1.3; }
+.win-pane h3 .when { color: var(--muted); font-weight: 400; }
+.win-pane h3.paper { margin: 0; line-height: 2; }
+.win-pane h3.paper + :not(h3) { margin-top: .6rem; }
+.win-pane h3.paper .chip, .win-pane h3.paper .links, .win-pane h3.paper .and { font-weight: 400; }
+.win-pane h3.paper .links { margin-left: .1rem; vertical-align: .08em; }
+.win-pane ul { margin: .2rem 0 0; padding-left: 1.1rem; font-size: .9rem; }
+.win-pane li { margin: .3rem 0; }
+.win-pane > p { margin: 0; color: var(--fg-soft); font-size: .92rem; }
+.win-pane pre { font-size: .88rem; margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; overflow: visible; }
+.win-pane pre + pre { margin-top: .8rem; }
+
+/* syntax highlighting for the install window (spans written by tools/highlight.py) */
+.win-body { --tk-cmd: #0061bf; --tk-flag: #2f78c4; --tk-str: #8a5a00; --tk-num: #1a6e8a; --tk-com: #7a7f86; --tk-kw: #0061bf; --tk-fn: #1d4f91; --tk-var: #6a4fa0; --tk-url: #1d4f91; --tk-op: #8a8f96; }
+:root[data-theme="dark"] .win-body { --tk-cmd: #add3f1; --tk-flag: #8fb4dc; --tk-str: #e3b968; --tk-num: #7fd0e0; --tk-com: #8a9199; --tk-kw: #add3f1; --tk-fn: #c9e1f7; --tk-var: #c3a8f0; --tk-url: #c9e1f7; --tk-op: #8a9199; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .win-body { --tk-cmd: #add3f1; --tk-flag: #8fb4dc; --tk-str: #e3b968; --tk-num: #7fd0e0; --tk-com: #8a9199; --tk-kw: #add3f1; --tk-fn: #c9e1f7; --tk-var: #c3a8f0; --tk-url: #c9e1f7; --tk-op: #8a9199; } }
+.tk-cmd, .tk-kw { color: var(--tk-cmd); font-weight: 600; }
+.tk-flag { color: var(--tk-flag); }
+.tk-str { color: var(--tk-str); }
+.tk-num { color: var(--tk-num); }
+.tk-com { color: var(--tk-com); font-style: italic; }
+.tk-fn { color: var(--tk-fn); }
+.tk-var { color: var(--tk-var); }
+.tk-url { color: var(--tk-url); }
+.tk-op { color: var(--tk-op); }
+
+/* the citation block: the paper's BibTeX, shown in full under the list */
+.win-pane .venues { margin: 0 0 .6rem; font-size: .95rem; line-height: 2; }
+.win-pane .venues .links { margin-left: .1rem; vertical-align: .08em; }
+.win-pane .bib-note { margin: .9rem 0 0; color: var(--muted); font-size: .84rem; }
+.win-pane pre.bib { margin: .45rem 0 0; padding: .7rem .8rem; background: linear-gradient(to bottom, color-mix(in srgb, var(--surface-2) 45%, var(--paper)), var(--paper)); border: 1px solid color-mix(in srgb, var(--rule) 60%, transparent); border-bottom-color: transparent; font-size: .74rem; line-height: 1.45; white-space: pre-wrap; overflow-wrap: anywhere; }
+
+/* contents */
+.win-body > p:not(.panel-label) { margin: 0 0 .7rem; color: var(--fg-soft); font-size: .92rem; line-height: 1.6; }
+.win-body > p.panel-note { margin: .9rem 0 0; font-size: .88rem; color: var(--muted); }
+.win-body pre { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; overflow: visible; }
+.win-body pre + pre { margin-top: .8rem; }
+.pg-item + .pg-item { margin-top: 1rem; padding-top: .9rem; border-top: 1px solid var(--rule); }
+.pg-item h3 { margin: 0 0 .4rem; font-size: .98rem; line-height: 1.3; }
+.pg-item h3 .when { color: var(--muted); font-weight: 400; }
+.pg-item p { margin: 0; color: var(--fg-soft); font-size: .92rem; }
+.pg-item ul { margin: .35rem 0 0; padding-left: 1.1rem; font-size: .9rem; }
+.pg-item li { margin: .3rem 0; }
+.pg-table { overflow-x: auto; }
+.win-body table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+.win-body th { text-align: left; font-weight: 600; }
+.win-body th, .win-body td { padding: .38rem .5rem .38rem 0; border-bottom: 1px solid var(--rule); }
+.win-body td:nth-child(2) { color: var(--accent); }
+.win-body th, .win-body td { text-align: left; }
+.win-body th:nth-child(2), .win-body td:nth-child(2) { width: 3.2rem; }
+
+/* ---------- banner hover panel (Related) ---------- */
+
+.related-panel {
+  position: absolute;
+  top: 100%;
+  z-index: 25;
+  min-width: 15rem;
+  padding: .5rem .8rem .6rem;
+  background: var(--bg);
+  border: 1px solid var(--rule-strong);
+  border-top: 0;
+  box-shadow: 0 12px 24px -12px rgba(0, 0, 0, .28);
+  color: var(--fg);
+  font-size: .82rem;
+  letter-spacing: -.01em;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+.related-panel[hidden] { display: none; }
+.related-panel p { display: flex; align-items: baseline; justify-content: space-between; gap: 1.2rem; margin: 0; }
+.related-panel p + p { margin-top: .2rem; }
+.related-panel a { color: inherit; text-decoration: underline; text-decoration-color: var(--rule-strong); }
+.related-panel a:hover { color: var(--accent); text-decoration-color: currentColor; }
+.related-panel .related-note { display: block; color: var(--muted); font-size: .66rem; line-height: 1.2; margin-bottom: .2rem; }
+.related-panel .related-what { color: var(--muted); font-size: .68rem; }
+@media (max-width: 46rem) { .related-panel { font-size: .88rem; } }
+
+/* ---------- ASCII grid: a fine graph-paper grid (as on paper.design/mono) that gives way to letters under the pointer (assets/ascii-reveal.js) ---------- */
+
+.ascii-bg { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+
+/* The page is an opaque sheet laid over the canvas; only scrolling to the bottom slides the sheet away and reveals the grid and the ASCII art (as on paper.design/mono). */
+main {
+  position: relative;
+  z-index: 1;
+  background: var(--bg);
+  padding-bottom: 3.6rem;
+  margin-bottom: 62vh;
+  box-shadow: 4px 8px 12px -4px rgba(0, 0, 0, .08), 4px 4px 4px -2px rgba(0, 0, 0, .08), 0 .5px 0 rgba(0, 0, 0, .08);
+}
+.site-footer { position: relative; z-index: 2; margin-top: 0; background: transparent; border-top: 0; }
+:root { --ascii-fine: rgba(110, 108, 96, .13); --ascii-ruler: rgba(110, 108, 96, .55); }
+:root[data-theme="dark"] { --ascii-fine: rgba(250, 248, 240, .06); --ascii-ruler: rgba(250, 248, 240, .4); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --ascii-fine: rgba(250, 248, 240, .06); --ascii-ruler: rgba(250, 248, 240, .4); } }
+
+@media (prefers-reduced-motion: reduce) { .win { transition: none; } }

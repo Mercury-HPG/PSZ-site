@@ -8,7 +8,8 @@
   <meta name="description"
     content="pSZ/cuSZ: a GPU-based error-bounded lossy compressor for scientific data, and the first GPU-practical framework of its kind.">
   <meta name="color-scheme" content="light dark">
-  <meta name="theme-color" content="#4169e1">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fefdfb">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#171717">
   <link rel="canonical" href="https://mercury-hpg.github.io/PSZ-site/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,15 +39,15 @@
             <span class="label">pSZ</span>
           </a>
         </li>
-        <li><a href="#variants"><span class="idx">01</span><span class="label">Variants</span></a></li>
+        <li><a href="#install"><span class="idx">01</span><span class="label">Install</span></a></li>
         <li><a href="#data"><span class="idx">02</span><span class="label">Data</span></a></li>
-        <li><a href="#install"><span class="idx">03</span><span class="label">Install</span></a></li>
+        <li><a href="https://mercury-hpg.github.io/projects.html"><span class="idx">03</span><span
+              class="label">Related</span></a></li>
         <li><a class="ext" href="https://github.com/szcompressor/cuSZ"><span class="idx"></span><span
               class="label">Repo</span></a></li>
         <li><a class="ext" href="https://mercury-hpg.github.io/"><span class="idx"></span><span
               class="label">Lab</span></a></li>
-        <li><a class="ext" href="https://jti.one/"><span class="idx"></span><span
-              class="label">PI</span></a></li>
+        <li><a class="ext" href="https://jti.one/"><span class="idx"></span><span class="label">PI</span></a></li>
       </ul>
     </nav>
   </header>
@@ -57,8 +58,9 @@
       <div class="wrap">
         <div class="hero-id">
           <h1>pSZ/cuSZ</h1>
-          <p class="role">A GPU-based error-bounded lossy compressor for scientific data.<a class="repo-link"
-              href="https://github.com/szcompressor/cuSZ" title="szcompressor/cuSZ on GitHub">GitHub</a></p>
+          <p class="role">A GPU-based error-bounded lossy compressor for scientific data.</p>
+          <a class="repo-link" href="https://github.com/szcompressor/cuSZ"
+            title="szcompressor/cuSZ on GitHub">GitHub</a>
         </div>
 
         <div class="bio">
@@ -72,109 +74,220 @@
           <p>© 2025 Argonne National Laboratory and Oakland University. BSD 3-Clause.</p>
         </div>
 
+
       </div>
     </section>
 
-    <section class="section" id="variants">
+    <section class="section" id="guide">
       <div class="wrap">
-        <div class="section-head prose">
-          <h2>Variants</h2>
-        </div>
-        <ul class="themes">
-          <li>
-            <h3>cuSZ (PACT '20) and cuSZ+ (CLUSTER '21)</h3>
-            <ul>
-              <li>Basic framework: <em>N</em>-D Lorenzo prediction and Huffman encoding on GPU.</li>
-              <li>Algorithmic novelty: fully parallelized <em>N</em>-D Lorenzo prediction and reverse prediction.</li>
-              <li>Pipeline novelty: alternative route for cases with extremely "smooth" data.</li>
-              <li><span class="chip">PACT '20</span> cuSZ: An efficient GPU-based error-bounded lossy compression
-                framework for scientific data <span class="links quiet"><a
-                    href="https://dl.acm.org/doi/10.1145/3410463.3414624">ACM</a> <a
-                    href="https://arxiv.org/abs/2007.09625">arXiv</a></span></li>
-              <li><span class="chip">CLUSTER '21</span> Optimizing error-bounded lossy compression for scientific data
-                on GPUs <span class="links quiet"><a
-                    href="https://doi.ieeecomputersociety.org/10.1109/Cluster48925.2021.00047">IEEE</a> <a
-                    href="https://arxiv.org/abs/2105.12912">arXiv</a></span></li>
-            </ul>
-          </li>
-          <li>
-            <h3>FZ-GPU <span class="when">· Zhang, Tian et al., '23</span></h3>
-            <p>Prediction plus de-redundancy only, no histogram or Huffman: it prioritizes
-              data-processing speed.</p>
-          </li>
-          <li>
-            <h3>cuSZ-<em>i</em> (SC '24) and cuSZ-Hi (SC '25)</h3>
-            <ul>
-              <li>SZ3/QoZ-HPEZ pipeline on GPU: spline-interpolation-based data reconstruction with high rate-distortion
-                capability.</li>
-              <li>Pipeline novelty: GPU-realistic ratio-boosting synergetic encoding stage applied to the original
-                framework is designed (cuSZ-<em>i</em>).</li>
-              <li>Pipeline novelty: It is further discussed in cuSZ-Hi using the sub-pipeline composition by the <a
-                  href="https://github.com/burtscher/LC-framework">LC framework</a> (a research project led by <a
-                  href="https://userweb.cs.txstate.edu/~burtscher/">Dr. Martin Burtscher</a>), forming two presets, HiTP
-                and HiCR, further pushing the boundary of achievable rate-distortion on GPU.</li>
-              <li><span class="chip">SC '24</span> cuSZ-<em>i</em>: High-ratio scientific lossy compression on GPUs with
-                optimized multi-level interpolation <span class="links quiet"><a
-                    href="https://doi.ieeecomputersociety.org/10.1109/SC41406.2024.00019">IEEE</a> <a
-                    href="https://arxiv.org/abs/2312.05492">arXiv</a></span></li>
-              <li><span class="chip">SC '25</span> Boosting scientific error-bounded lossy compression through optimized
-                synergistic lossy-lossless orchestration <span class="links quiet"><a
-                    href="https://dl.acm.org/doi/10.1145/3712285.3759798">ACM</a> <a
-                    href="https://arxiv.org/abs/2507.11165">arXiv</a></span></li>
-            </ul>
-          </li>
-        </ul>
-        <p class="prose note">Citing pSZ/cuSZ: please cite
-          <code>\cite{tian2020cusz,tian2021cuszplus,liu_tian_wu2024cuszi,wu_pan2025cuszhi}</code>, with
-          the BibTeX entries in
-          <a href="https://github.com/szcompressor/cuSZ/blob/master/doc/psz-cusz.bib">doc/psz-cusz.bib</a>.
-        </p>
-      </div>
-    </section>
+        <div class="wins">
+          <article class="win" id="variants">
+            <header class="win-bar win-tabs">
+              <div class="win-tablist" role="tablist" aria-label="Variants"><button type="button" class="win-tab"
+                  role="tab" id="tab-variants-cusz" aria-controls="pane-variants-cusz"
+                  aria-selected="true">cusz</button><button type="button" class="win-tab" role="tab"
+                  id="tab-variants-cuszi" aria-controls="pane-variants-cuszi"
+                  aria-selected="false">cusz-i</button><button type="button" class="win-tab" role="tab"
+                  id="tab-variants-fz" aria-controls="pane-variants-fz" aria-selected="false">fz-gpu</button></div>
+              <button type="button" class="win-x" aria-label="Collapse the variants panel"
+                aria-expanded="true">&times;</button>
+            </header>
+            <div class="win-body">
+              <div class="win-pane" id="pane-variants-cusz" role="tabpanel" aria-labelledby="tab-variants-cusz">
+                <h3 class="paper">cuSZ <span class="chip">PACT '20</span> <span class="links quiet"><a
+                        href="https://dl.acm.org/doi/10.1145/3410463.3414624">ACM</a> <a
+                        href="https://arxiv.org/abs/2007.09625">arXiv</a></span> <span class="and">and</span>
+                cuSZ+ <span class="chip">CLUSTER '21</span> <span class="links quiet"><a
+                        href="https://doi.ieeecomputersociety.org/10.1109/Cluster48925.2021.00047">IEEE</a> <a
+                        href="https://arxiv.org/abs/2105.12912">arXiv</a></span></h3>
+                <ul>
+                  <li>Basic framework: <em>N</em>-D Lorenzo prediction and Huffman encoding on GPU.</li>
+                  <li>Algorithmic novelty: fully parallelized <em>N</em>-D Lorenzo prediction and reverse prediction.
+                  </li>
+                  <li>Pipeline novelty: alternative route for cases with extremely "smooth" data.</li>
+                </ul>
+                <p class="bib-note">Kindly note: If you mention pSZ/cuSZ in your paper, please use the bibliography entries below.</p>
+                <pre class="bib"><code><span class="tk-kw">@inproceedings</span>{<span class="tk-fn">tian2020cusz</span>,
+      <span class="tk-flag">title</span> = <span class="tk-str">{{\textsc cuSZ}: An efficient GPU-based error-bounded lossy compression framework for scientific data}</span>,
+     <span class="tk-flag">author</span> = <span class="tk-str">{Tian, Jiannan and Di, Sheng and Zhao, Kai and Rivera, Cody and Fulp, Megan Hickman and Underwood, Robert and Jin, Sian and Liang, Xin and Calhoun, Jon and Tao, Dingwen and Cappello, Franck}</span>,
+       <span class="tk-flag">year</span> = {<span class="tk-num">2020</span>}, <span class="tk-flag">month</span> = {<span class="tk-num">10</span>}, <span class="tk-flag">url</span> = <span class="tk-str">{https://doi.org/10.1145/3410463.3414624}</span>, <span class="tk-flag">address</span> = <span class="tk-str">{Atlanta (virtual event), GA, USA}</span>,
+  <span class="tk-flag">booktitle</span> = <span class="tk-str">{PACT '20: Proceedings of the ACM International Conference on Parallel Architectures and Compilation Techniques}</span>}
 
-    <section class="section" id="install">
-      <div class="wrap">
-        <div class="section-head prose">
-          <h2>Install and run</h2>
-        </div>
-        <div class="panel">
-          <p class="panel-label">Build from source</p>
-          <pre><code>git clone --recursive https://github.com/szcompressor/cuSZ.git cusz-latest
-cd cusz-latest &amp;&amp; mkdir build &amp;&amp; cd build
-cmake .. -DPSZ_BACKEND=cuda -DPSZ_BUILD_EXAMPLES=on -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_CUDA_ARCHITECTURES="&lt;sm&gt;"
-make -j
-make install</code></pre>
-          <p class="panel-note">Needs CUDA 11.4 onward, a C++17 host compiler (GCC 9 onward or any
-            Clang), and CMake 3.18 onward. Without <code>CMAKE_CUDA_ARCHITECTURES</code> (or the
-            <code>CUDAARCHS</code> environment variable), the build targets <code>75</code> only.
-          </p>
-        </div>
-        <div class="panel">
-          <p class="panel-label">Compress, then reconstruct</p>
-          <pre><code>cusz -t f32 -m r2r -e 1e-4 -i data.f32 -l 3600-1800 -z --report cr
-cusz -i data.f32.cusza -x --compare data.f32 --skip write2disk</code></pre>
-          <p class="panel-note"><code>--skip write2disk</code> checks compression quality without
-            writing the reconstruction to disk. <code>-p</code> picks the pipeline, e.g.
-            <code>-p spl..</code> or <code>-p preset:hicr</code>. <code>-V</code> reports the machine it ran on.
-          </p>
-        </div>
-        <div class="panel">
-          <p class="panel-label">Python binding</p>
-          <pre><code>CUDAARCHS="&lt;sm&gt;" pip install -e py_ext --no-build-isolation</code></pre>
-          <pre><code>from psz import compress_init, decompress_init
+<span class="tk-kw">@inproceedings</span>{<span class="tk-fn">tian2021cuszplus</span>,
+      <span class="tk-flag">title</span> = <span class="tk-str">{Optimizing error-bounded lossy compression for scientific data on GPUs}</span>,
+     <span class="tk-flag">author</span> = <span class="tk-str">{Tian, Jiannan and Di, Sheng and Yu, Xiaodong and Rivera, Cody and Zhao, Kai and Jin, Sian and Feng, Yunhe and Liang, Xin and Tao, Dingwen and Cappello, Franck}</span>,
+       <span class="tk-flag">year</span> = {<span class="tk-num">2021</span>}, <span class="tk-flag">month</span> = {<span class="tk-num">09</span>}, <span class="tk-flag">url</span> = <span class="tk-str">{https://doi.ieeecomputersociety.org/10.1109/Cluster48925.2021.00047}</span>, <span class="tk-flag">series</span> = <span class="tk-str">{CLUSTER '21}</span>, <span class="tk-flag">address</span> = <span class="tk-str">{Portland (virtual event), OR, USA}</span>,
+  <span class="tk-flag">booktitle</span> = <span class="tk-str">{2021 IEEE International Conference on Cluster Computing (CLUSTER)}</span>}</code></pre>
+              </div>
+              <div class="win-pane" id="pane-variants-cuszi" role="tabpanel" aria-labelledby="tab-variants-cuszi"
+                hidden>
+                <h3 class="paper">cuSZ-<em>i</em> <span class="chip">SC '24</span> <span class="links quiet"><a
+                        href="https://doi.ieeecomputersociety.org/10.1109/SC41406.2024.00019">IEEE</a> <a
+                        href="https://arxiv.org/abs/2312.05492">arXiv</a></span> <span class="and">and</span>
+                cuSZ-Hi <span class="chip">SC '25</span> <span class="links quiet"><a
+                        href="https://dl.acm.org/doi/10.1145/3712285.3759798">ACM</a> <a
+                        href="https://arxiv.org/abs/2507.11165">arXiv</a></span></h3>
+                <ul>
+                  <li>SZ3/QoZ-HPEZ pipeline on GPU: spline-interpolation-based data reconstruction with high
+                    rate-distortion
+                    capability.</li>
+                  <li>Pipeline novelty: GPU-realistic ratio-boosting synergetic encoding stage applied to the original
+                    framework is designed (cuSZ-<em>i</em>).</li>
+                  <li>Pipeline novelty: It is further discussed in cuSZ-Hi using the sub-pipeline composition by the <a
+                      href="https://github.com/burtscher/LC-framework">LC framework</a> (a research project led by <a
+                      href="https://userweb.cs.txstate.edu/~burtscher/">Dr. Martin Burtscher</a>), forming two presets,
+                    HiTP
+                    and HiCR, further pushing the boundary of achievable rate-distortion on GPU.</li>
+                </ul>
+                <p class="bib-note">Kindly note: If you mention pSZ/cuSZ in your paper, please use the bibliography entries below.</p>
+                <pre class="bib"><code><span class="tk-kw">@inproceedings</span>{<span class="tk-fn">liu_tian_wu2024cuszi</span>,
+      <span class="tk-flag">title</span> = <span class="tk-str">{{\scshape cuSZ}-{\itshape i}: High-ratio scientific lossy compression on GPUs with optimized multi-level interpolation}</span>,
+     <span class="tk-flag">author</span> = <span class="tk-str">{Liu, Jinyang and Tian, Jiannan and Wu, Shixun and Di, Sheng and Zhang, Boyuan and Underwood, Robert and Huang, Yafan and Huang, Jiajun and Zhao, Kai and Li, Guanpeng and Tao, Dingwen and Chen, Zizhong and Cappello, Franck}</span>,
+       <span class="tk-flag">year</span> = {<span class="tk-num">2024</span>}, <span class="tk-flag">month</span> = {<span class="tk-num">11</span>}, <span class="tk-flag">url</span> = <span class="tk-str">{https://doi.ieeecomputersociety.org/10.1109/SC41406.2024.00019}</span>, <span class="tk-flag">address</span> = <span class="tk-str">{Atlanta, GA, USA}</span>,
+  <span class="tk-flag">booktitle</span> = <span class="tk-str">{SC '24: Proceedings of the International Conference for High Performance Computing, Networking, Storage and Analysis}</span>,
+       <span class="tk-flag">note</span> = <span class="tk-str">{Co-first authors: Jinyang Liu, Jiannan Tian, and Shixun Wu}</span>}
 
-with compress_init(data.shape) as c:  # data: a float32 CuPy array
-    c.compress_process("lrz..", data, 1e-3 * c.compress_extrema(data).rng)
-    header, archive = c.compress_archive()
+<span class="tk-kw">@inproceedings</span>{<span class="tk-fn">wu_pan2025cuszhi</span>,
+      <span class="tk-flag">title</span> = <span class="tk-str">{Boosting Scientific Error-Bounded Lossy Compression through Optimized Synergistic Lossy-Lossless Orchestration}</span>,
+     <span class="tk-flag">author</span> = <span class="tk-str">{Wu, Shixun and Pan, Jinwen and Liu, Jinyang and Tian, Jiannan and Qiu, Ziwei and Huang, Jiajun and Zhao, Kai and Liang, Xin and Di, Sheng and Chen, Zizhong and Cappello, Franck}</span>,
+       <span class="tk-flag">year</span> = {<span class="tk-num">2025</span>}, <span class="tk-flag">month</span> = {<span class="tk-num">11</span>}, <span class="tk-flag">url</span> = <span class="tk-str">{https://doi.org/10.1145/3712285.3759798}</span>, <span class="tk-flag">address</span> = <span class="tk-str">{St. Louis, MO, USA}</span>,
+  <span class="tk-flag">booktitle</span> = <span class="tk-str">{SC '25: Proceedings of the International Conference for High Performance Computing, Networking, Storage and Analysis}</span>,
+       <span class="tk-flag">note</span> = <span class="tk-str">{Co-first authors: Shixun Wu and Jinwen Pan}</span>}</code></pre>
+              </div>
+              <div class="win-pane" id="pane-variants-fz" role="tabpanel" aria-labelledby="tab-variants-fz" hidden>
+                <h3>FZ-GPU <span class="when">· Zhang, Tian et al., '23</span></h3>
+                <p>Prediction plus de-redundancy only, no histogram or Huffman: it prioritizes
+                  data-processing speed.</p>
+              </div>
+            </div>
+          </article>
+          <article class="win" id="install">
+            <header class="win-bar win-tabs">
+              <div class="win-tablist" role="tablist" aria-label="Install and run"><button type="button" class="win-tab"
+                  role="tab" id="tab-install" aria-controls="pane-install" aria-selected="true">build.sh</button><button
+                  type="button" class="win-tab" role="tab" id="tab-run" aria-controls="pane-run"
+                  aria-selected="false">run.sh</button><button type="button" class="win-tab" role="tab" id="tab-python"
+                  aria-controls="pane-python" aria-selected="false">python.py</button></div>
+              <button type="button" class="win-x" aria-label="Collapse the install panel"
+                aria-expanded="true">&times;</button>
+            </header>
+            <div class="win-body">
+              <div class="win-pane" id="pane-install" role="tabpanel" aria-labelledby="tab-install">
+                <pre><code><span class="tk-cmd">git</span> clone <span class="tk-flag">--recursive</span> <span class="tk-url">https://github.com/szcompressor/cuSZ.git</span> cusz-latest
+<span class="tk-cmd">cd</span> cusz-latest <span class="tk-op">&amp;&amp;</span> <span class="tk-cmd">mkdir</span> build <span class="tk-op">&amp;&amp;</span> <span class="tk-cmd">cd</span> build
+<span class="tk-cmd">cmake</span> .. <span class="tk-flag">-DPSZ_BACKEND</span>=<span class="tk-str">cuda</span> <span class="tk-flag">-DPSZ_BUILD_EXAMPLES</span>=<span class="tk-str">on</span> <span class="tk-flag">-DCMAKE_BUILD_TYPE</span>=<span class="tk-str">Release</span> <span class="tk-op">\</span>
+    <span class="tk-flag">-DCMAKE_CUDA_ARCHITECTURES</span>=<span class="tk-str">"&lt;sm&gt;"</span>
+<span class="tk-cmd">make</span> <span class="tk-flag">-j</span>
+<span class="tk-cmd">make</span> install</code></pre>
 
-with decompress_init(header) as dc:
-    xdata = dc.decompress_process(archive)</code></pre>
-          <p class="panel-note"><code>psz</code> is a nanobind binding that works on CuPy arrays;
-            <a
-              href="https://github.com/szcompressor/cuSZ/blob/master/example/src/demo_py.ipynb"><code>example/src/demo_py.ipynb</code></a>
-            walks through it.
-          </p>
+                <p class="panel-note">Needs CUDA 11.4 onward, a C++17 host compiler (GCC 9 onward or any
+                  Clang), and CMake 3.18 onward. Without <code>CMAKE_CUDA_ARCHITECTURES</code> (or the
+                  <code>CUDAARCHS</code> environment variable), the build targets <code>75</code> only.
+                </p>
+              </div>
+              <div class="win-pane" id="pane-run" role="tabpanel" aria-labelledby="tab-run" hidden>
+                <pre><code><span class="tk-cmd">cusz</span> <span class="tk-flag">-t</span> f32 <span class="tk-flag">-m</span> r2r <span class="tk-flag">-e</span> <span class="tk-num">1e-4</span> <span class="tk-flag">-i</span> data.f32 <span class="tk-flag">-l</span> <span class="tk-num">3600-1800</span> <span class="tk-flag">-z</span> <span class="tk-flag">--report</span> cr
+<span class="tk-cmd">cusz</span> <span class="tk-flag">-i</span> data.f32.cusza <span class="tk-flag">-x</span> <span class="tk-flag">--compare</span> data.f32 <span class="tk-flag">--skip</span> write2disk</code></pre>
+
+                <p class="panel-note"><code>--skip write2disk</code> checks compression quality without
+                  writing the reconstruction to disk. <code>-p</code> picks the pipeline, e.g.
+                  <code>-p spl..</code> or <code>-p preset:hicr</code>. <code>-V</code> reports the machine it ran on.
+                </p>
+              </div>
+              <div class="win-pane" id="pane-python" role="tabpanel" aria-labelledby="tab-python" hidden>
+                <pre><code><span class="tk-var">CUDAARCHS</span>=<span class="tk-str">"&lt;sm&gt;"</span> <span class="tk-cmd">pip</span> install <span class="tk-flag">-e</span> py_ext <span class="tk-flag">--no-build-isolation</span></code></pre>
+                <pre><code><span class="tk-kw">from</span> psz <span class="tk-kw">import</span> compress_init, decompress_init
+
+<span class="tk-kw">with</span> <span class="tk-fn">compress_init</span>(data.shape) <span class="tk-kw">as</span> c:  <span class="tk-com"># data: a float32 CuPy array</span>
+    c.<span class="tk-fn">compress_process</span>(<span class="tk-str">"lrz.."</span>, data, <span class="tk-num">1e-3</span> * c.<span class="tk-fn">compress_extrema</span>(data).rng)
+    header, archive = c.<span class="tk-fn">compress_archive</span>()
+
+<span class="tk-kw">with</span> <span class="tk-fn">decompress_init</span>(header) <span class="tk-kw">as</span> dc:
+    xdata = dc.<span class="tk-fn">decompress_process</span>(archive)</code></pre>
+
+                <p class="panel-note"><code>psz</code> is a nanobind binding that works on CuPy arrays;
+                  <a
+                    href="https://github.com/szcompressor/cuSZ/blob/master/example/src/demo_py.ipynb"><code>example/src/demo_py.ipynb</code></a>
+                  walks through it.
+                </p>
+              </div>
+            </div>
+          </article>
+          <div class="win-stack">
+            <article class="win" id="data">
+              <header class="win-bar">
+                <h2 class="win-title">datasets.csv</h2>
+                <button type="button" class="win-x" aria-label="Collapse datasets.csv"
+                  aria-expanded="true">&times;</button>
+              </header>
+              <div class="win-body">
+                <div class="pg-table">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Dataset</th>
+                        <th>Dim.</th>
+                        <th>Description</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>EXAALT</td>
+                        <td>1D</td>
+                        <td>molecular dynamics simulation</td>
+                      </tr>
+                      <tr>
+                        <td>HACC</td>
+                        <td>1D</td>
+                        <td>cosmology, particle simulation</td>
+                      </tr>
+                      <tr>
+                        <td>CESM-ATM</td>
+                        <td>2D</td>
+                        <td>climate simulation</td>
+                      </tr>
+                      <tr>
+                        <td>EXAFEL</td>
+                        <td>2D</td>
+                        <td>images from the LCLS instrument</td>
+                      </tr>
+                      <tr>
+                        <td>Hurricane</td>
+                        <td>3D</td>
+                        <td>weather simulation</td>
+                      </tr>
+                      <tr>
+                        <td>NYX</td>
+                        <td>3D</td>
+                        <td>adaptive mesh hydrodynamics and N-body cosmology</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <p class="panel-note">The fields are available from
+                  <a href="https://sdrbench.github.io/">SDRBench</a>.
+                </p>
+              </div>
+            </article>
+            <article class="win" id="people">
+              <header class="win-bar">
+                <h2 class="win-title">people.txt</h2>
+                <button type="button" class="win-x" aria-label="Collapse people.txt"
+                  aria-expanded="true">&times;</button>
+              </header>
+              <div class="win-body">
+                <p><strong>Developers.</strong> Jiannan Tian (primary/PI), Robert Underwood
+                  (deployment), Jinyang Liu, Shixun Wu, Jinwen Pan (cuSZ-<em>i</em>/Hi), Cody Rivera
+                  (Huffman coding), Sheng Di and Franck Cappello (administrative PIs).</p>
+                <p><strong>Contributors.</strong> Jon Calhoun, Wenyu Gai, Megan Hickman Fulp, Xin Liang,
+                  Kai Zhao.</p>
+
+                <p>With thanks to Dingwen Tao, who advised the project from 2020 to 2024, and to
+                  Dominique LaSalle (NVIDIA), mentor at the Argonne GPU Hackathon 2021.</p>
+              </div>
+            </article>
+          </div>
         </div>
         <p class="prose note">Fuller instructions, including the recommended GCC and Clang
           combinations, live in the wiki:
@@ -185,6 +298,7 @@ with decompress_init(header) as dc:
         </p>
       </div>
     </section>
+
 
     <!-- Disabled for now: numbers are from 2dec57f (Jan 2021) and want a refresh.
   <section class="section" id="bench">
@@ -212,77 +326,7 @@ with decompress_init(header) as dc:
   </section>
   -->
 
-    <section class="section" id="data">
-      <div class="wrap">
-        <div class="section-head prose">
-          <h2>Datasets</h2>
-          <span class="hint">from SDRBench</span>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Dataset</th>
-                <th>Dim.</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>EXAALT</td>
-                <td>1D</td>
-                <td>molecular dynamics simulation</td>
-              </tr>
-              <tr>
-                <td>HACC</td>
-                <td>1D</td>
-                <td>cosmology, particle simulation</td>
-              </tr>
-              <tr>
-                <td>CESM-ATM</td>
-                <td>2D</td>
-                <td>climate simulation</td>
-              </tr>
-              <tr>
-                <td>EXAFEL</td>
-                <td>2D</td>
-                <td>images from the LCLS instrument</td>
-              </tr>
-              <tr>
-                <td>Hurricane ISABEL</td>
-                <td>3D</td>
-                <td>weather simulation</td>
-              </tr>
-              <tr>
-                <td>NYX</td>
-                <td>3D</td>
-                <td>adaptive mesh hydrodynamics and N-body cosmology</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <p class="prose note">The fields are available from
-          <a href="https://sdrbench.github.io/">SDRBench</a>.
-        </p>
-      </div>
-    </section>
 
-    <section class="section" id="people">
-      <div class="wrap">
-        <div class="section-head prose">
-          <h2>People</h2>
-        </div>
-        <div class="bio prose">
-          <p><strong>Developers.</strong> Jiannan Tian (primary/PI), Robert Underwood
-            (deployment), Jinyang Liu, Shixun Wu, Jinwen Pan (cuSZ-<em>i</em>/Hi), Cody Rivera
-            (Huffman coding), Sheng Di and Franck Cappello (administrative PIs).</p>
-          <p><strong>Contributors.</strong> Jon Calhoun, Wenyu Gai, Megan Hickman Fulp, Xin Liang,
-            Kai Zhao.</p>
-          <p>With thanks to Dingwen Tao, who advised the project from 2020 to 2024, and to
-            Dominique LaSalle (NVIDIA), mentor at the Argonne GPU Hackathon 2021.</p>
-        </div>
-      </div>
-    </section>
 
     <section class="section" id="funding">
       <div class="wrap">
@@ -339,6 +383,40 @@ with decompress_init(header) as dc:
       })
     })()
   </script>
+
+  <script src="assets/ascii-amr.js"></script>
+  <script src="assets/ascii-reveal.js" defer></script>
+
+  <script>
+      // The x in a panel's title bar folds the panel up to its title bar; click it again to open. Tabs in a title bar switch the panel's view.
+      (() => {
+        for (const x of document.querySelectorAll('.win-x')) {
+          x.addEventListener('click', () => {
+            const win = x.closest('.win')
+            const folded = win.classList.toggle('folded')
+            x.setAttribute('aria-expanded', String(!folded))
+            x.innerHTML = folded ? '+' : '&times;'
+          })
+        }
+        for (const list of document.querySelectorAll('.win-tablist')) {
+          const tabs = [...list.querySelectorAll('.win-tab')]
+          const show = (i) => {
+            tabs.forEach((t, k) => {
+              t.setAttribute('aria-selected', String(k === i))
+              document.getElementById(t.getAttribute('aria-controls')).hidden = k !== i
+            })
+          }
+          tabs.forEach((t, k) => t.addEventListener('click', () => show(k)))
+          list.addEventListener('keydown', (e) => {
+            const i = tabs.findIndex((t) => t.getAttribute('aria-selected') === 'true')
+            const j = e.key === 'ArrowRight' ? Math.min(tabs.length - 1, i + 1) : e.key === 'ArrowLeft' ? Math.max(0, i - 1) : -1
+            if (j >= 0) { show(j); tabs[j].focus() }
+          })
+        }
+      })()
+  </script>
+
+  <script src="assets/related-panel.js" defer></script>
 
 </body>
 
